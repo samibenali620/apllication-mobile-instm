@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../utils/languages.dart';
 import 'sidebar_page.dart';
+import '../main.dart'; // fournit teaGreen et loginGreen
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -88,12 +90,34 @@ class _LoginState extends State<Login> {
     return Directionality(
       textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
+        // Fond de page vert clair
+        backgroundColor: loginGreen,
         appBar: AppBar(
-          title: Text(texts['welcome']!),
+          backgroundColor: loginGreen,
+          elevation: 0,
+          toolbarHeight: 90,
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
+          title: const Padding(
+            padding: EdgeInsets.only(top: 18.0),
+            child: Text(
+              'BASSIANA',
+              style: TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.bold,
+                fontSize: 42,
+                letterSpacing: 1.5,
+              ),
+            ),
+          ),
+          centerTitle: true,
           actions: [
             // Bouton de sélection de langue (indépendant du bouton login)
             IconButton(
-              icon: const Icon(Icons.language),
+              icon: const Icon(Icons.language, color: Colors.black87),
               tooltip: 'Changer de langue',
               onPressed: _showLanguagePicker,
             ),
@@ -130,6 +154,8 @@ class _LoginState extends State<Login> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: texts['email'],
+                  filled: true,
+                  fillColor: Colors.white,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -156,6 +182,8 @@ class _LoginState extends State<Login> {
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: texts['password'],
+                  filled: true,
+                  fillColor: Colors.white,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
