@@ -200,10 +200,12 @@ class _LoginState extends State<Login> {
                 onPressed: _handleLogin,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                  foregroundColor: Colors.black,
                 ),
                 child: Text(
                   texts['login']!,
                   style: const TextStyle(fontSize: 16),
+
                 ),
               ),
             ],
