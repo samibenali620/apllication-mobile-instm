@@ -32,47 +32,7 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-  void _showLanguagePicker() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Choisir la langue',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              ..._availableLanguages.map((opt) {
-                final isSelected = _currentLang == opt['code'];
-                return ListTile(
-                  leading:
-                  Text(opt['flag']!, style: const TextStyle(fontSize: 24)),
-                  title: Text(opt['label']!),
-                  trailing: isSelected
-                      ? const Icon(Icons.check, color: Colors.green)
-                      : null,
-                  onTap: () {
-                    setState(() {
-                      _currentLang = opt['code']!;
-                    });
-                    Navigator.pop(context);
-                  },
-                );
-              }),
-            ],
-          ),
-        );
-      },
-    );
-  }
+
 
   void _handleLogin() {
     // Navigue vers la page sidebar après connexion
@@ -95,50 +55,105 @@ class _LoginState extends State<Login> {
         appBar: AppBar(
           backgroundColor: loginGreen,
           elevation: 0,
-          toolbarHeight: 90,
+          toolbarHeight: 120,
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Colors.white,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
           ),
-          title: const Padding(
-            padding: EdgeInsets.only(top: 18.0),
-            child: Text(
+          title:  Padding(
+            padding:const EdgeInsets.only(top: 12.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+              const Text(
               'BASSIANA',
               style: TextStyle(
-                color: Colors.black87,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: 42,
+                fontSize: 30,
                 letterSpacing: 1.5,
               ),
             ),
-          ),
-          centerTitle: true,
-          actions: [
-            // Bouton de sélection de langue (indépendant du bouton login)
-            IconButton(
-              icon: const Icon(Icons.language, color: Colors.black87),
-              tooltip: 'Changer de langue',
-              onPressed: _showLanguagePicker,
+            const SizedBox(height: 12),
+            Text(
+              texts['appSubtitle']!,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+              ),
             ),
           ],
+            ),
+          ),
+          actions: [
+            ..._availableLanguages.map((opt) {
+              final isSelected = _currentLang == opt['code'];
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      _currentLang = opt['code']!;
+                    });
+                  },
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: isSelected
+                          ? Border.all(color: Colors.black87, width: 2)
+                          : null,
+                    ),
+                    child: Text(
+                      opt['flag']!,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ],
         ),
-        body: Padding(
+          body: Column(
+            children: [
+            // Zone verte du haut (vide, juste pour l'espace visuel)
+              Expanded(
+                flex: 22, // ajuste ce chiffre pour plus/moins de vert
+                child: Container(
+                  width: double.infinity,
+                  color: loginGreen,
+                ),
+              ),
+          Expanded(
+            flex:68,
+            child: Container(
+              color: Colors.white,
+        child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                texts['hello']!,
-                textAlign: TextAlign.center,
+                texts['welcome back']!,
+                textAlign: TextAlign.left,
                 style: const TextStyle(
-                  fontSize: 28,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 32),
-
+              const SizedBox(height: 6),
+              Text(
+                texts['subtitle']!,
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.black54,
+                ),
+              ),
+              const SizedBox(height: 20),
               // Label email
               Text(
                 texts['email']!,
@@ -193,14 +208,26 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  texts['forgotPassword']!,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.green,
+                  ),
+                ),
+              ),
               const SizedBox(height: 32),
 
-              // Bouton login (sans bouton de langue à côté)
+              // Bouton login
               ElevatedButton(
                 onPressed: _handleLogin,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  foregroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.green,
                 ),
                 child: Text(
                   texts['login']!,
@@ -208,9 +235,24 @@ class _LoginState extends State<Login> {
 
                 ),
               ),
+              const SizedBox(height: 16),
+              Center(
+                child: Text(
+                  texts['needHelp']!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.lightGreen,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
+      ),
+    ),
+    ],
+          ),
       ),
     );
   }
