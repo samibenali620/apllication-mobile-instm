@@ -25,9 +25,11 @@ class _SidebarPageState extends State<SidebarPage> {
 
   // Contenu de chaque page (à remplacer plus tard par vos vraies pages)
   List<Widget> get _pages => [
-    const Center(
-      child: Text('Bienvenue sur la page principale',
-          style: TextStyle(fontSize: 18)),
+    const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _HomeHeader(),
+      ],
     ),
     const Center(
       child:
@@ -606,6 +608,141 @@ class _PlotHistoryCard extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+// En-tête de la page Home : date du jour, salutation, localisation et météo.
+class _HomeHeader extends StatelessWidget {
+  const _HomeHeader();
+
+  String _greeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  }
+
+  String _formattedDate() {
+    const days = [
+      'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+      'Friday', 'Saturday', 'Sunday'
+    ];
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    final now = DateTime.now();
+    final dayName = days[now.weekday - 1];
+    final monthName = months[now.month - 1];
+    return '$dayName, $monthName ${now.day}, ${now.year}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            _formattedDate(),
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.black54,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            _greeting(),
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: const [
+              Icon(Icons.location_on, size: 16, color: Colors.black54),
+              SizedBox(width: 4),
+              Text(
+                'Tunis, Tunisie',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Carré vert météo
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.green.shade800,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Today's Weather",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 60),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: const [
+                        Text(
+                          '28°C',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          'Sunny',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      '12 km/h',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
+                const Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Icon(
+                    Icons.wb_sunny,
+                    size: 48,
+                    color: Colors.yellow,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
