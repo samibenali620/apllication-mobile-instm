@@ -16,7 +16,7 @@ class _SidebarPageState extends State<SidebarPage> {
 
   // Titres correspondant à chaque page (affichés dans l'AppBar)
   final List<String> _titles = const [
-    'Accueil',
+    'Home',
     'Nouvelle Observation',
     'Résultat',
     'Historique',
@@ -36,9 +36,7 @@ class _SidebarPageState extends State<SidebarPage> {
     const Center(
       child: Text('Page Résultat', style: TextStyle(fontSize: 18)),
     ),
-    const Center(
-      child: Text('Page Historique', style: TextStyle(fontSize: 18)),
-    ),
+  const _HistoryPage(),
     _ProfilePage(onLogout: _handleLogout),
   ];
 
@@ -101,40 +99,93 @@ class _SidebarPageState extends State<SidebarPage> {
                 padding: EdgeInsets.zero,
                 children: [
                   ListTile(
-                    leading: const Icon(Icons.home, color: Colors.black87),
-                    title: const Text('Home',
-                        style: TextStyle(color: Colors.black87)),
+                    leading: Icon(Icons.home,
+                        color: _selectedIndex == 0
+                            ? Colors.green
+                            : Colors.black87),
+                    title: Text('Home',
+                        style: TextStyle(
+                          color: _selectedIndex == 0
+                              ? Colors.green
+                              : Colors.black87,
+                          fontWeight: _selectedIndex == 0
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        )),
                     selected: _selectedIndex == 0,
+                    selectedTileColor: Colors.white,
                     onTap: () => _onItemSelected(0),
                   ),
                   ListTile(
-                    leading:
-                    const Icon(Icons.add_box, color: Colors.black87),
-                    title: const Text('New Observation',
-                        style: TextStyle(color: Colors.black87)),
+                    leading: Icon(Icons.add_box,
+                        color: _selectedIndex == 1
+                            ? Colors.green
+                            : Colors.black87),
+                    title: Text('New Observation',
+                        style: TextStyle(
+                          color: _selectedIndex == 1
+                              ? Colors.green
+                              : Colors.black87,
+                          fontWeight: _selectedIndex == 1
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        )),
                     selected: _selectedIndex == 1,
+                    selectedTileColor: Colors.white,
                     onTap: () => _onItemSelected(1),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.assignment_turned_in,
-                        color: Colors.black87),
-                    title: const Text('Result',
-                        style: TextStyle(color: Colors.black87)),
+                    leading: Icon(Icons.assignment_turned_in,
+                        color: _selectedIndex == 2
+                            ? Colors.green
+                            : Colors.black87),
+                    title: Text('Result',
+                        style: TextStyle(
+                          color: _selectedIndex == 2
+                              ? Colors.green
+                              : Colors.black87,
+                          fontWeight: _selectedIndex == 2
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        )),
                     selected: _selectedIndex == 2,
+                    selectedTileColor: Colors.white,
                     onTap: () => _onItemSelected(2),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.history, color: Colors.black87),
-                    title: const Text('History',
-                        style: TextStyle(color: Colors.black87)),
+                    leading: Icon(Icons.history,
+                        color: _selectedIndex == 3
+                            ? Colors.green
+                            : Colors.black87),
+                    title: Text('History',
+                        style: TextStyle(
+                          color: _selectedIndex == 3
+                              ? Colors.green
+                              : Colors.black87,
+                          fontWeight: _selectedIndex == 3
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        )),
                     selected: _selectedIndex == 3,
+                    selectedTileColor: Colors.white,
                     onTap: () => _onItemSelected(3),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.person, color: Colors.black87),
-                    title: const Text('Profile',
-                        style: TextStyle(color: Colors.black87)),
+                    leading: Icon(Icons.person,
+                        color: _selectedIndex == 4
+                            ? Colors.green
+                            : Colors.black87),
+                    title: Text('Profile',
+                        style: TextStyle(
+                          color: _selectedIndex == 4
+                              ? Colors.green
+                              : Colors.black87,
+                          fontWeight: _selectedIndex == 4
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        )),
                     selected: _selectedIndex == 4,
+                    selectedTileColor: Colors.white,
                     onTap: () => _onItemSelected(4),
                   ),
                 ],
@@ -157,16 +208,31 @@ class _SidebarPageState extends State<SidebarPage> {
         ),
       ),
       body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onFooterItemTapped,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: teaGreen,
-        selectedItemColor: Colors.black87,
-        unselectedItemColor: Colors.black45,
-        showUnselectedLabels: true,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
+      bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6,
+                offset: Offset(0, -2),
+              ),
+            ],
+          ),
+          child: SafeArea(
+              child: SizedBox(
+                height: (_selectedIndex == 3 || _selectedIndex == 4) ? 72 : 56,
+                child: BottomNavigationBar(
+                  currentIndex: _selectedIndex,
+                  onTap: _onFooterItemTapped,
+                  type: BottomNavigationBarType.fixed,
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  selectedItemColor: Colors.green,
+                  unselectedItemColor: Colors.black45,
+                  showUnselectedLabels: true,
+                  selectedFontSize: 12,
+                  unselectedFontSize: 12,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -190,7 +256,10 @@ class _SidebarPageState extends State<SidebarPage> {
           ),
         ],
       ),
-    );
+    )
+          ),
+      ),
+      );
   }
 }
 
@@ -340,6 +409,207 @@ class _ProfilePage extends StatelessWidget {
           label: const Text('Déconnexion'),
         ),
       ],
+    );
+  }
+}
+// Page Historique : affiche des filtres (plantes / période) en haut,
+// puis la liste de l'historique en dessous.
+class _HistoryPage extends StatelessWidget {
+  const _HistoryPage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Row(
+            children: [
+              _FilterBox(
+                label: 'All plts',
+                onTap: () {
+                  // TODO: ouvrir le sélecteur de plantes
+                },
+              ),
+              const SizedBox(width: 10),
+              _FilterBox(
+                label: 'Last 30 days',
+                onTap: () {
+                  // TODO: ouvrir le sélecteur de période
+                },
+              ),
+            ],
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(16, 4, 16, 8),
+          child: Text(
+            'August 2026',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            children: [
+              _PlotHistoryCard(
+                title: 'Plot A – Olive Grove',
+                subtitle: 'August 20, 2026',
+                badgeLabel: 'Irrigate Now',
+                badgeColor: Colors.red,
+              ),
+              _PlotHistoryCard(
+                title: 'Plot B – Wheat Field',
+                subtitle: 'August 14, 2026',
+                badgeLabel: 'Good Conditions',
+                badgeColor: Colors.green,
+              ),
+              _PlotHistoryCard(
+                title: 'Plot C – Citrus',
+                subtitle: 'August 6, 2026',
+                badgeLabel: 'Sow Now',
+                badgeColor: Colors.green,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 4),
+                child: Text(
+                  'July 2026',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              _PlotHistoryCard(
+                title: 'Plot A – Olive Grove',
+                subtitle: 'Jul 29, 2026',
+                badgeLabel: 'Irrigate Now',
+                badgeColor: Colors.red,
+              ),
+              _PlotHistoryCard(
+                title: 'Plot B – Wheat Field',
+                subtitle: 'Jul 18, 2026',
+                badgeLabel: 'Good Conditions',
+                badgeColor: Colors.green,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// Petit carré filtre réutilisable, avec libellé + flèche.
+// Petit carré filtre réutilisable, avec libellé + flèche, et un sous-texte optionnel en dessous.
+// Petit carré filtre réutilisable, avec libellé + flèche.
+class _FilterBox extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+
+  const _FilterBox({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.black12),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.keyboard_arrow_down, size: 18),
+          ],
+        ),
+      ),
+    );
+  }
+}
+// Carte d'historique : titre (plot), sous-titre (date) et badge coloré.
+class _PlotHistoryCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final String badgeLabel;
+  final Color badgeColor;
+
+  const _PlotHistoryCard({
+    required this.title,
+    required this.subtitle,
+    required this.badgeLabel,
+    required this.badgeColor,
+  }
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.black12),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: badgeColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              badgeLabel,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
