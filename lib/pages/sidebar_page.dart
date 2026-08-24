@@ -49,6 +49,12 @@ class _SidebarPageState extends State<SidebarPage> {
     Navigator.pop(context); // Ferme le drawer après sélection
   }
 
+  void _onFooterItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   // Déconnexion : retourne à la page Login et vide la pile de navigation
   void _handleLogout() {
     Navigator.pushAndRemoveUntil(
@@ -151,6 +157,39 @@ class _SidebarPageState extends State<SidebarPage> {
         ),
       ),
       body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onFooterItemTapped,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: teaGreen,
+        selectedItemColor: Colors.black87,
+        unselectedItemColor: Colors.black45,
+        showUnselectedLabels: true,
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_box),
+            label: 'Observe',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment_turned_in),
+            label: 'Result',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'History',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profil',
+          ),
+        ],
+      ),
     );
   }
 }
@@ -166,26 +205,31 @@ class _ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
       children: [
-        // Photo de profil + nom + email
+        // Nom + photo de profil + email (nom au-dessus de la photo)
         Center(
           child: Column(
             children: [
               const CircleAvatar(
-                radius: 50,
+                radius: 45,
                 backgroundColor: teaGreen,
-                child: Icon(Icons.person, size: 60, color: Colors.black54),
+                child: Icon(Icons.person, size: 55, color: Colors.black54),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 2),
               TextButton.icon(
                 onPressed: () {
                   // TODO: brancher la sélection/upload de photo
                 },
-                icon: const Icon(Icons.camera_alt, size: 18),
+                icon: const Icon(Icons.camera_alt, size: 16),
                 label: const Text('Changer la photo'),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: const Size(0, 0),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               const Text(
                 'Nom Utilisateur',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -198,24 +242,28 @@ class _ProfilePage extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 14),
 
-        // Informations personnelles
+        // Premier carré : informations personnelles (téléphone + localisation)
         Card(
           elevation: 0,
-          color: teaGreen.withValues(alpha: 0.35),
+          color: Colors.white,
+          margin: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
+            side: const BorderSide(color: Colors.black12),
           ),
           child: Column(
             children: const [
               ListTile(
+                dense: true,
                 leading: Icon(Icons.phone),
                 title: Text('Téléphone'),
                 subtitle: Text('+216 00 000 000'),
               ),
               Divider(height: 1),
               ListTile(
+                dense: true,
                 leading: Icon(Icons.location_on),
                 title: Text('Localisation'),
                 subtitle: Text('Tunis, Tunisie'),
@@ -223,42 +271,62 @@ class _ProfilePage extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 14),
 
-        // Actions du compte
-        ListTile(
-          leading: const Icon(Icons.edit),
-          title: const Text('Modifier le profil'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            // TODO: naviguer vers l'écran de modification de profil
-          },
+        // Deuxième carré : actions du compte
+        Card(
+          elevation: 0,
+          color: Colors.white,
+          margin: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: const BorderSide(color: Colors.black12),
+          ),
+          child: Column(
+            children: [
+              ListTile(
+                dense: true,
+                leading: const Icon(Icons.edit),
+                title: const Text('Modifier le profil'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  // TODO: naviguer vers l'écran de modification de profil
+                },
+              ),
+              const Divider(height: 1),
+              ListTile(
+                dense: true,
+                leading: const Icon(Icons.lock_outline),
+                title: const Text('Changer le mot de passe'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  // TODO: naviguer vers l'écran de changement de mot de passe
+                },
+              ),
+              const Divider(height: 1),
+              ListTile(
+                dense: true,
+                leading: const Icon(Icons.language),
+                title: const Text('Langue'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  // TODO: ouvrir le sélecteur de langue
+                },
+              ),
+              const Divider(height: 1),
+              ListTile(
+                dense: true,
+                leading: const Icon(Icons.info_outline),
+                title: const Text('À propos de Bassiana'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  // TODO: afficher les infos de l'application
+                },
+              ),
+            ],
+          ),
         ),
-        ListTile(
-          leading: const Icon(Icons.lock_outline),
-          title: const Text('Changer le mot de passe'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            // TODO: naviguer vers l'écran de changement de mot de passe
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.language),
-          title: const Text('Langue'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            // TODO: ouvrir le sélecteur de langue
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.info_outline),
-          title: const Text('À propos de Bassiana'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            // TODO: afficher les infos de l'application
-          },
-        ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 14),
 
         // Déconnexion
         ElevatedButton.icon(
