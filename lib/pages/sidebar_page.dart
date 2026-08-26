@@ -24,21 +24,19 @@ class _SidebarPageState extends State<SidebarPage> {
   ];
 
   // Contenu de chaque page (à remplacer plus tard par vos vraies pages)
+  // To this:
   List<Widget> get _pages => [
-    const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _HomeHeader(),
-      ],
+    const SingleChildScrollView( // Remove "const" here!child:_HomeHeader(),
+      child: _HomeHeader(),
     ),
     const Center(
-      child:
-      Text('Page Nouvelle Observation', style: TextStyle(fontSize: 18)),
+      child: Text('Page Nouvelle Observation', style: TextStyle(fontSize: 18)),
     ),
+    // ...
     const Center(
       child: Text('Page Résultat', style: TextStyle(fontSize: 18)),
     ),
-  const _HistoryPage(),
+    const _HistoryPage(),
     _ProfilePage(onLogout: _handleLogout),
   ];
 
@@ -211,57 +209,57 @@ class _SidebarPageState extends State<SidebarPage> {
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6,
-                offset: Offset(0, -2),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6,
+              offset: Offset(0, -2),
+            ),
+          ],
+        ),
+        child: SafeArea(
+            child: SizedBox(
+              height: (_selectedIndex == 3 || _selectedIndex == 4) ? 72 : 56,
+              child: BottomNavigationBar(
+                currentIndex: _selectedIndex,
+                onTap: _onFooterItemTapped,
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.white,
+                elevation: 0,
+                selectedItemColor: Colors.green,
+                unselectedItemColor: Colors.black45,
+                showUnselectedLabels: true,
+                selectedFontSize: 12,
+                unselectedFontSize: 12,
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.add_box),
+                    label: 'Observe',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.assignment_turned_in),
+                    label: 'Result',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.history),
+                    label: 'History',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    label: 'Profil',
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: SafeArea(
-              child: SizedBox(
-                height: (_selectedIndex == 3 || _selectedIndex == 4) ? 72 : 56,
-                child: BottomNavigationBar(
-                  currentIndex: _selectedIndex,
-                  onTap: _onFooterItemTapped,
-                  type: BottomNavigationBarType.fixed,
-                  backgroundColor: Colors.white,
-                  elevation: 0,
-                  selectedItemColor: Colors.green,
-                  unselectedItemColor: Colors.black45,
-                  showUnselectedLabels: true,
-                  selectedFontSize: 12,
-                  unselectedFontSize: 12,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_box),
-            label: 'Observe',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_turned_in),
-            label: 'Result',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'History',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profil',
-          ),
-        ],
+            )
+        ),
       ),
-    )
-          ),
-      ),
-      );
+    );
   }
 }
 
@@ -559,7 +557,7 @@ class _PlotHistoryCard extends StatelessWidget {
     required this.badgeLabel,
     required this.badgeColor,
   }
-  );
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -618,7 +616,6 @@ class _PlotHistoryCard extends StatelessWidget {
 // En-tête de la page Home : date du jour, salutation, localisation et météo.
 class _HomeHeader extends StatelessWidget {
   const _HomeHeader();
-
   String _greeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) return 'Good morning';
@@ -684,7 +681,7 @@ class _HomeHeader extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.green.shade800,
+              color: Colors.green.shade900,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Stack(
@@ -700,13 +697,13 @@ class _HomeHeader extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 60),
+                    const SizedBox(height: 8),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: const [
                         Text(
-                          '28°C',
+                          '28°',
                           style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
@@ -723,23 +720,168 @@ class _HomeHeader extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      '12 km/h',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.white70,
-                      ),
+                    const SizedBox(height: 12),
+                    Container(
+                      height: 1,
+                      color: Colors.white30,
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: const [
+                        Icon(Icons.water_drop, size: 15, color: Colors.white70),
+                        SizedBox(width: 4),
+                        Text(
+                          '65%',
+                          style: TextStyle(fontSize: 13, color: Colors.white70),
+                        ),
+                        SizedBox(width: 16),
+                        Icon(Icons.air, size: 15, color: Colors.white70),
+                        SizedBox(width: 4),
+                        Text(
+                          '12 km/h',
+                          style: TextStyle(fontSize: 13, color: Colors.white70),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        _ForecastDay(day: 'Thu', icon: Icons.wb_sunny, temp: '45°'),
+                        _ForecastDay(day: 'Fri', icon: Icons.wb_sunny, temp: '43°'),
+                        _ForecastDay(day: 'Sat', icon: Icons.wb_sunny, temp: '38°'),
+                        _ForecastDay(day: 'Sun', icon: Icons.wb_sunny, temp: '41°'),
+                        _ForecastDay(day: 'Mon', icon: Icons.wb_sunny, temp: '36°'),
+                      ],
                     ),
                   ],
                 ),
-                const Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Icon(
-                    Icons.wb_sunny,
-                    size: 48,
-                    color: Colors.yellow,
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+          const _TodayAdviceBox(),
+        ],
+      ),
+    );
+  }
+}
+class _ForecastDay extends StatelessWidget {
+  final String day;
+  final IconData icon;
+  final String temp;
+
+  const _ForecastDay({
+    required this.day,
+    required this.icon,
+    required this.temp,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          day,
+          style: const TextStyle(fontSize: 12, color: Colors.white70),
+        ),
+        const SizedBox(height: 6),
+        Icon(icon, size: 20, color: Colors.yellow),
+        const SizedBox(height: 6),
+        Text(
+          temp,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+}
+// Carré "Today's Advice" : conseil du jour avec icône pluie, titre,
+// recommandation, texte explicatif et lien vers l'analyse complète.
+// Carré "Today's Advice" : conseil du jour avec icône pluie, titre,
+// recommandation, texte explicatif et lien vers l'analyse complète.
+class _TodayAdviceBox extends StatelessWidget {
+  const _TodayAdviceBox({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
+      decoration: BoxDecoration(
+        color: Colors.orange.shade100,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.orange.shade400,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.water_drop,
+              size: 30,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Today's Advice",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.orange,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Time to Irrigate',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Soil moisture is low, no rain expected for the next three days.',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                InkWell(
+                  onTap: () {
+                    // TODO: naviguer vers l'analyse complète
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Text(
+                        'See full analysis',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.orange,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Icon(Icons.arrow_forward, size: 16, color: Colors.orange),
+                    ],
                   ),
                 ),
               ],
