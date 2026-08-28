@@ -35,10 +35,7 @@ class _SidebarPageState extends State<SidebarPage> {
         child: const _HomeHeader(),
       ),
     ),
-    const Center(
-      child: Text('Page Nouvelle Observation', style: TextStyle(fontSize: 18)),
-    ),
-    // ...
+    const _NewObservationPage(),
     const Center(
       child: Text('Page Résultat', style: TextStyle(fontSize: 18)),
     ),
@@ -1076,6 +1073,187 @@ class _YourFieldBox extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+// Page "Nouvelle Observation" : sélection du plot avec navigation gauche/droite.
+class _NewObservationPage extends StatefulWidget {
+  const _NewObservationPage();
+
+  @override
+  State<_NewObservationPage> createState() => _NewObservationPageState();
+}
+
+class _NewObservationPageState extends State<_NewObservationPage> {
+  final List<String> _plots = ['Plot A – Olive', 'Plot B – Wheat', 'Plot C – Citrus'];
+  int _selectedIndex = 0;
+
+  final List<String> _crops = ['Olive', 'Wheat', 'Citrus', 'Tomato'];
+  int _selectedCropIndex = 0;
+
+  void _goLeft() {
+    if (_selectedIndex > 0) {
+      setState(() => _selectedIndex--);
+    }
+  }
+
+  void _goRight() {
+    if (_selectedIndex < _plots.length - 1) {
+      setState(() => _selectedIndex++);
+    }
+  }
+  Widget _buildCropBox(int index) {
+    final isSelected = index == _selectedCropIndex;
+    return Expanded(
+      child: InkWell(
+        onTap: () => setState(() => _selectedCropIndex = index),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.green.shade900 : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected ? Colors.green.shade900 : Colors.black12,
+            ),
+          ),
+          child: Text(
+            _crops[index],
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: isSelected ? Colors.white : Colors.black87,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Titre avec logo de localisation
+          Row(
+            children: const [
+              Icon(LucideIcons.mapPin, size: 20, color: Colors.black87),
+              SizedBox(width: 8),
+              Text(
+                'Which plot?',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Les 3 petits carrés de sélection
+          Row(
+            children: List.generate(_plots.length, (index) {
+              final isSelected = index == _selectedIndex;
+              return Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: index != _plots.length - 1 ? 10 : 0,
+                  ),
+                  child: InkWell(
+                    onTap: () => setState(() => _selectedIndex = index),
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected ? Colors.green.shade900 : Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isSelected ? Colors.green.shade900 : Colors.black12,
+                        ),
+                      ),
+                      child: Text(
+                        _plots[index],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: isSelected ? Colors.white : Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+          const SizedBox(height: 20),
+
+          // Flèches de navigation gauche / droite
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: _selectedIndex > 0 ? _goLeft : null,
+                icon: const Icon(LucideIcons.chevronLeft),
+                color: Colors.black87,
+                disabledColor: Colors.black26,
+              ),
+              const SizedBox(width: 16),
+              IconButton(
+                onPressed: _selectedIndex < _plots.length - 1 ? _goRight : null,
+                icon: const Icon(LucideIcons.chevronRight),
+                color: Colors.black87,
+                disabledColor: Colors.black26,
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // Titre avec logo de plante
+          Row(
+            children: const [
+              Icon(LucideIcons.sprout, size: 20, color: Colors.black87),
+              SizedBox(width: 8),
+              Text(
+                'Crop Type',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Première ligne : Olive, Wheat
+          Row(
+            children: [
+              _buildCropBox(0),
+              const SizedBox(width: 10),
+              _buildCropBox(1),
+            ],
+          ),
+          const SizedBox(height: 10),
+
+          // Deuxième ligne : Citrus, Tomato
+          Row(
+            children: [
+              _buildCropBox(2),
+              const SizedBox(width: 10),
+              _buildCropBox(3),
+            ],
           ),
         ],
       ),
