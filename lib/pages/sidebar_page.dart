@@ -773,6 +773,10 @@ class _HomeHeader extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           const _TodayAdviceBox(),
+          const SizedBox(height: 14),
+          const _NewObservationBox(),
+          const SizedBox(height: 14),
+          const _YourFieldBox(),
         ],
       ),
     );
@@ -897,6 +901,146 @@ class _TodayAdviceBox extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+class _NewObservationBox extends StatelessWidget {
+  const _NewObservationBox();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.green.shade900,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Text(
+                'New Observation',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                "Log today's field data for fresh advice",
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white70,
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Colors.orange,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.add,
+                size: 24,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+// Carré "Your Field" : titre, nom du plot, dernière vérification,
+// séparateur, statut d'humidité (orange) et pourcentage en haut à droite.
+class _YourFieldBox extends StatelessWidget {
+  const _YourFieldBox();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.black12),
+      ),
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Your Field',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'Plot A – Olive Grove',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Last checked 2 days ago',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.black54,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Container(
+                height: 1,
+                color: Colors.grey.shade300,
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: const [
+                  Icon(LucideIcons.droplet, size: 18, color: Colors.orange),
+                  SizedBox(width: 6),
+                  Text(
+                    'Moisture – Low',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const Positioned(
+            top: 0,
+            right: 0,
+            child: Text(
+              '38%',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
