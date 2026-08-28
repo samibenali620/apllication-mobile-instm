@@ -5,7 +5,7 @@ import 'login.dart';
 import '../main.dart'; // fournit teaGreen
 import '../widgets/app_scrollbar.dart';
 import '../widgets/app_button.dart';
-
+import '../services/weatherservice.dart';
 class SidebarPage extends StatefulWidget {
   const SidebarPage({super.key});
 
@@ -626,8 +626,40 @@ class _PlotHistoryCard extends StatelessWidget {
   }
 }
 // En-tête de la page Home : date du jour, salutation, localisation et météo.
-class _HomeHeader extends StatelessWidget {
+class _HomeHeader extends StatefulWidget {
   const _HomeHeader();
+
+  @override
+  State<_HomeHeader> createState() => _HomeHeaderState();
+}
+
+class _HomeHeaderState extends State<_HomeHeader> {
+  final WeatherService _weatherService = WeatherService();
+  WeatherData? _weather;
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWeather();
+  }
+
+  Future<void> _loadWeather() async {
+    try {
+      final data = await _weatherService.fetchForecast(city: 'Tunis');
+      setState(() {
+        _weather = data;
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
+  }
+
   String _greeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) return 'Good morning';
@@ -659,18 +691,12 @@ class _HomeHeader extends StatelessWidget {
         children: [
           Text(
             _formattedDate(),
-            style: const TextStyle(
-              fontSize: 13,
-              color: Colors.black54,
-            ),
+            style: const TextStyle(fontSize: 13, color: Colors.black54),
           ),
           const SizedBox(height: 4),
           Text(
             _greeting(),
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
           Row(
@@ -679,10 +705,7 @@ class _HomeHeader extends StatelessWidget {
               SizedBox(width: 4),
               Text(
                 'Tunis, Tunisie',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.black54,
-                ),
+                style: TextStyle(fontSize: 13, color: Colors.black54),
               ),
             ],
           ),
@@ -696,83 +719,101 @@ class _HomeHeader extends StatelessWidget {
               color: Colors.green.shade900,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Stack(
+            child: _loading
+                ? const SizedBox(
+              height: 160,
+              child: Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
+            )
+                : _error != null
+                ? SizedBox(
+              height: 100,
+              child: Center(
+                child: Text(
+                  'Weather unavailable',
+                  style: const TextStyle(color: Colors.white70),
+                ),
+              ),
+            )
+                : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const Text(
+                  "Today's Weather",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
                   children: [
-                    const Text(
-                      "Today's Weather",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                    Text(
+                      '${_weather!.currentTempC.round()}°',
+                      style: const TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: const [
-                        Text(
-                          '28°',
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Sunny',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Container(
-                      height: 1,
-                      color: Colors.white30,
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: const [
-                        Icon(LucideIcons.droplet, size: 15, color: Colors.white70),
-                        SizedBox(width: 4),
-                        Text(
-                          '65%',
-                          style: TextStyle(fontSize: 13, color: Colors.white70),
-                        ),
-                        SizedBox(width: 16),
-                        Icon(LucideIcons.wind, size: 15, color: Colors.white70),
-                        SizedBox(width: 4),
-                        Text(
-                          '12 km/h',
-                          style: TextStyle(fontSize: 13, color: Colors.white70),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        _ForecastDay(day: 'Thu', icon: LucideIcons.sun, temp: '45°'),
-                        _ForecastDay(day: 'Fri', icon: LucideIcons.sun, temp: '43°'),
-                        _ForecastDay(day: 'Sat', icon: LucideIcons.sun, temp: '38°'),
-                        _ForecastDay(day: 'Sun', icon: LucideIcons.sun, temp: '41°'),
-                        _ForecastDay(day: 'Mon', icon: LucideIcons.sun, temp: '36°'),
-                      ],
+                    const SizedBox(width: 10),
+                    Text(
+                      _weather!.conditionText,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 12),
+                Container(height: 1, color: Colors.white30),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    const Icon(LucideIcons.droplet,
+                        size: 15, color: Colors.white70),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${_weather!.humidity}%',
+                      style: const TextStyle(
+                          fontSize: 13, color: Colors.white70),
+                    ),
+                    const SizedBox(width: 16),
+                    const Icon(LucideIcons.wind,
+                        size: 15, color: Colors.white70),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${_weather!.windKph.round()} km/h',
+                      style: const TextStyle(
+                          fontSize: 13, color: Colors.white70),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: _weather!.forecast.map((f) {
+                    return _ForecastDay(
+                      day: f.dayName,
+                      iconUrl: f.iconUrl,
+                      temp: '${f.maxTempC.round()}°',
+                    );
+                  }).toList(),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 14),
           const _TodayAdviceBox(),
+          const SizedBox(height: 14),
+          const _NewObservationBox(),
+          const SizedBox(height: 14),
+          const _YourFieldBox(),
         ],
       ),
     );
@@ -780,12 +821,12 @@ class _HomeHeader extends StatelessWidget {
 }
 class _ForecastDay extends StatelessWidget {
   final String day;
-  final IconData icon;
+  final String iconUrl;
   final String temp;
 
   const _ForecastDay({
     required this.day,
-    required this.icon,
+    required this.iconUrl,
     required this.temp,
   });
 
@@ -793,12 +834,9 @@ class _ForecastDay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          day,
-          style: const TextStyle(fontSize: 12, color: Colors.white70),
-        ),
+        Text(day, style: const TextStyle(fontSize: 12, color: Colors.white70)),
         const SizedBox(height: 6),
-        Icon(icon, size: 20, color: Colors.yellow),
+        Image.network(iconUrl, width: 24, height: 24),
         const SizedBox(height: 6),
         Text(
           temp,
@@ -897,6 +935,146 @@ class _TodayAdviceBox extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+class _NewObservationBox extends StatelessWidget {
+  const _NewObservationBox();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.green.shade900,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Text(
+                'New Observation',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                "Log today's field data for fresh advice",
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white70,
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Colors.orange,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.add,
+                size: 24,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+// Carré "Your Field" : titre, nom du plot, dernière vérification,
+// séparateur, statut d'humidité (orange) et pourcentage en haut à droite.
+class _YourFieldBox extends StatelessWidget {
+  const _YourFieldBox();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.black12),
+      ),
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Your Field',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'Plot A – Olive Grove',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Last checked 2 days ago',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.black54,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Container(
+                height: 1,
+                color: Colors.grey.shade300,
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: const [
+                  Icon(LucideIcons.droplet, size: 18, color: Colors.orange),
+                  SizedBox(width: 6),
+                  Text(
+                    'Moisture – Low',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const Positioned(
+            top: 0,
+            right: 0,
+            child: Text(
+              '38%',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
