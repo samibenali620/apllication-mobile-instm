@@ -1105,6 +1105,20 @@ class _NewObservationPageState extends State<_NewObservationPage> {
       setState(() => _selectedIndex++);
     }
   }
+  // Soil moisture (0.0 = Dry, 1.0 = Wet)
+  double _soilMoisture = 0.32;
+
+  String get _moistureLabel {
+    if (_soilMoisture < 0.35) return 'Low';
+    if (_soilMoisture < 0.65) return 'Medium';
+    return 'High';
+  }
+
+  Color get _moistureColor {
+    if (_soilMoisture < 0.35) return Colors.orange.shade700;
+    if (_soilMoisture < 0.65) return Colors.amber.shade700;
+    return Colors.green.shade700;
+  }
   Widget _buildCropBox(int index) {
     final isSelected = index == _selectedCropIndex;
     return Expanded(
@@ -1255,8 +1269,94 @@ class _NewObservationPageState extends State<_NewObservationPage> {
               _buildCropBox(3),
             ],
           ),
+          const SizedBox(height: 28),
+
+// ── Soil moisture ────────────────────────────────────────────
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.black12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(LucideIcons.droplet, size: 18, color: Colors.black87),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Soil moisture',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '$_moistureLabel · ${(_soilMoisture * 100).round()}%',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: _moistureColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    trackHeight: 6,
+                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
+                    activeTrackColor: Colors.transparent,
+                    inactiveTrackColor: Colors.transparent,
+                    thumbColor: Colors.white,
+                    overlayColor: Colors.orange.withOpacity(0.2),
+                  ),
+                  child: Slider(
+                    value: _soilMoisture,
+                    onChanged: (v) => setState(() => _soilMoisture = v),
+                    min: 0.0,
+                    max: 1.0,
+                  ),
+                ),
+                // Gradient track
+                Container(
+                  height: 6,
+                  margin: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFFE53935), // rouge
+                        Color(0xFFFB8C00), // orange
+                        Color(0xFFFDD835), // jaune
+                        Color(0xFF43A047), // vert
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Dry', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                      Text('Wet', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 }
+
