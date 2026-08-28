@@ -420,6 +420,7 @@ class _ProfilePage extends StatelessWidget {
       ),
     );
   }
+
 }
 // Page Historique : affiche des filtres (plantes / période) en haut,
 // puis la liste de l'historique en dessous.
