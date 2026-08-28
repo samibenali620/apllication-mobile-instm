@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'login.dart';
 import '../main.dart'; // fournit teaGreen
+import '../widgets/app_scrollbar.dart';
+import '../widgets/app_button.dart';
 
 class SidebarPage extends StatefulWidget {
   const SidebarPage({super.key});
@@ -26,8 +29,11 @@ class _SidebarPageState extends State<SidebarPage> {
   // Contenu de chaque page (à remplacer plus tard par vos vraies pages)
   // To this:
   List<Widget> get _pages => [
-    const SingleChildScrollView( // Remove "const" here!child:_HomeHeader(),
-      child: _HomeHeader(),
+    AppScrollbar(
+      builder: (context, controller) => SingleChildScrollView(
+        controller: controller,
+        child: const _HomeHeader(),
+      ),
     ),
     const Center(
       child: Text('Page Nouvelle Observation', style: TextStyle(fontSize: 18)),
@@ -95,11 +101,13 @@ class _SidebarPageState extends State<SidebarPage> {
               ),
             ),
             Expanded(
-              child: ListView(
+              child: AppScrollbar(
+                builder: (context, controller) => ListView(
+                controller: controller,
                 padding: EdgeInsets.zero,
                 children: [
                   ListTile(
-                    leading: Icon(Icons.home,
+                    leading: Icon(LucideIcons.home,
                         color: _selectedIndex == 0
                             ? Colors.green
                             : Colors.black87),
@@ -117,7 +125,7 @@ class _SidebarPageState extends State<SidebarPage> {
                     onTap: () => _onItemSelected(0),
                   ),
                   ListTile(
-                    leading: Icon(Icons.add_box,
+                    leading: Icon(LucideIcons.plus,
                         color: _selectedIndex == 1
                             ? Colors.green
                             : Colors.black87),
@@ -135,7 +143,7 @@ class _SidebarPageState extends State<SidebarPage> {
                     onTap: () => _onItemSelected(1),
                   ),
                   ListTile(
-                    leading: Icon(Icons.assignment_turned_in,
+                    leading: Icon(LucideIcons.clipboardCheck,
                         color: _selectedIndex == 2
                             ? Colors.green
                             : Colors.black87),
@@ -153,7 +161,7 @@ class _SidebarPageState extends State<SidebarPage> {
                     onTap: () => _onItemSelected(2),
                   ),
                   ListTile(
-                    leading: Icon(Icons.history,
+                    leading: Icon(LucideIcons.history,
                         color: _selectedIndex == 3
                             ? Colors.green
                             : Colors.black87),
@@ -171,7 +179,7 @@ class _SidebarPageState extends State<SidebarPage> {
                     onTap: () => _onItemSelected(3),
                   ),
                   ListTile(
-                    leading: Icon(Icons.person,
+                    leading: Icon(LucideIcons.user,
                         color: _selectedIndex == 4
                             ? Colors.green
                             : Colors.black87),
@@ -189,19 +197,21 @@ class _SidebarPageState extends State<SidebarPage> {
                     onTap: () => _onItemSelected(4),
                   ),
                 ],
+                ),
               ),
             ),
             // Bouton de déconnexion collé en bas du sidebar
             const Divider(height: 1, color: Colors.black26),
             SafeArea(
               top: false,
-              child: ListTile(
-                leading: const Icon(Icons.logout, color: Colors.red),
-                title: const Text(
-                  'Déconnexion',
-                  style: TextStyle(color: Colors.red),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: AppButton(
+                  label: 'Déconnexion',
+                  icon: LucideIcons.logOut,
+                  variant: AppButtonVariant.danger,
+                  onPressed: _handleLogout,
                 ),
-                onTap: _handleLogout,
               ),
             ),
           ],
@@ -235,23 +245,23 @@ class _SidebarPageState extends State<SidebarPage> {
                 unselectedFontSize: 12,
                 items: const [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
+                    icon: Icon(LucideIcons.home),
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.add_box),
+                    icon: Icon(LucideIcons.plus),
                     label: 'Observe',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.assignment_turned_in),
+                    icon: Icon(LucideIcons.clipboardCheck),
                     label: 'Result',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.history),
+                    icon: Icon(LucideIcons.history),
                     label: 'History',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.person),
+                    icon: Icon(LucideIcons.user),
                     label: 'Profil',
                   ),
                 ],
@@ -273,7 +283,9 @@ class _ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return AppScrollbar(
+      builder: (context, controller) => ListView(
+      controller: controller,
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
       children: [
         // Nom + photo de profil + email (nom au-dessus de la photo)
@@ -283,14 +295,14 @@ class _ProfilePage extends StatelessWidget {
               const CircleAvatar(
                 radius: 45,
                 backgroundColor: teaGreen,
-                child: Icon(Icons.person, size: 55, color: Colors.black54),
+                child: Icon(LucideIcons.user, size: 55, color: Colors.black54),
               ),
               const SizedBox(height: 2),
               TextButton.icon(
                 onPressed: () {
                   // TODO: brancher la sélection/upload de photo
                 },
-                icon: const Icon(Icons.camera_alt, size: 16),
+                icon: const Icon(LucideIcons.camera, size: 16),
                 label: const Text('Changer la photo'),
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
@@ -326,14 +338,14 @@ class _ProfilePage extends StatelessWidget {
             children: const [
               ListTile(
                 dense: true,
-                leading: Icon(Icons.phone),
+                leading: Icon(LucideIcons.phone),
                 title: Text('Téléphone'),
                 subtitle: Text('+216 00 000 000'),
               ),
               Divider(height: 1),
               ListTile(
                 dense: true,
-                leading: Icon(Icons.location_on),
+                leading: Icon(LucideIcons.mapPin),
                 title: Text('Localisation'),
                 subtitle: Text('Tunis, Tunisie'),
               ),
@@ -355,9 +367,9 @@ class _ProfilePage extends StatelessWidget {
             children: [
               ListTile(
                 dense: true,
-                leading: const Icon(Icons.edit),
+                leading: const Icon(LucideIcons.squarePen),
                 title: const Text('Modifier le profil'),
-                trailing: const Icon(Icons.chevron_right),
+                trailing: const Icon(LucideIcons.chevronRight),
                 onTap: () {
                   // TODO: naviguer vers l'écran de modification de profil
                 },
@@ -365,9 +377,9 @@ class _ProfilePage extends StatelessWidget {
               const Divider(height: 1),
               ListTile(
                 dense: true,
-                leading: const Icon(Icons.lock_outline),
+                leading: const Icon(LucideIcons.lockKeyhole),
                 title: const Text('Changer le mot de passe'),
-                trailing: const Icon(Icons.chevron_right),
+                trailing: const Icon(LucideIcons.chevronRight),
                 onTap: () {
                   // TODO: naviguer vers l'écran de changement de mot de passe
                 },
@@ -375,9 +387,9 @@ class _ProfilePage extends StatelessWidget {
               const Divider(height: 1),
               ListTile(
                 dense: true,
-                leading: const Icon(Icons.language),
+                leading: const Icon(LucideIcons.languages),
                 title: const Text('Langue'),
-                trailing: const Icon(Icons.chevron_right),
+                trailing: const Icon(LucideIcons.chevronRight),
                 onTap: () {
                   // TODO: ouvrir le sélecteur de langue
                 },
@@ -385,9 +397,9 @@ class _ProfilePage extends StatelessWidget {
               const Divider(height: 1),
               ListTile(
                 dense: true,
-                leading: const Icon(Icons.info_outline),
+                leading: const Icon(LucideIcons.info),
                 title: const Text('À propos de Bassiana'),
-                trailing: const Icon(Icons.chevron_right),
+                trailing: const Icon(LucideIcons.chevronRight),
                 onTap: () {
                   // TODO: afficher les infos de l'application
                 },
@@ -398,17 +410,14 @@ class _ProfilePage extends StatelessWidget {
         const SizedBox(height: 14),
 
         // Déconnexion
-        ElevatedButton.icon(
+        AppButton(
+          label: 'Déconnexion',
+          icon: LucideIcons.logOut,
+          variant: AppButtonVariant.danger,
           onPressed: onLogout,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-          ),
-          icon: const Icon(Icons.logout),
-          label: const Text('Déconnexion'),
         ),
       ],
+      ),
     );
   }
 }
@@ -453,7 +462,9 @@ class _HistoryPage extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: ListView(
+          child: AppScrollbar(
+            builder: (context, controller) => ListView(
+            controller: controller,
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             children: [
               _PlotHistoryCard(
@@ -498,6 +509,7 @@ class _HistoryPage extends StatelessWidget {
                 badgeColor: Colors.green,
               ),
             ],
+            ),
           ),
         ),
       ],
@@ -537,7 +549,7 @@ class _FilterBox extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down, size: 18),
+            const Icon(LucideIcons.chevronDown, size: 18),
           ],
         ),
       ),
@@ -663,7 +675,7 @@ class _HomeHeader extends StatelessWidget {
           const SizedBox(height: 4),
           Row(
             children: const [
-              Icon(Icons.location_on, size: 16, color: Colors.black54),
+              Icon(LucideIcons.mapPin, size: 16, color: Colors.black54),
               SizedBox(width: 4),
               Text(
                 'Tunis, Tunisie',
@@ -728,14 +740,14 @@ class _HomeHeader extends StatelessWidget {
                     const SizedBox(height: 12),
                     Row(
                       children: const [
-                        Icon(Icons.water_drop, size: 15, color: Colors.white70),
+                        Icon(LucideIcons.droplet, size: 15, color: Colors.white70),
                         SizedBox(width: 4),
                         Text(
                           '65%',
                           style: TextStyle(fontSize: 13, color: Colors.white70),
                         ),
                         SizedBox(width: 16),
-                        Icon(Icons.air, size: 15, color: Colors.white70),
+                        Icon(LucideIcons.wind, size: 15, color: Colors.white70),
                         SizedBox(width: 4),
                         Text(
                           '12 km/h',
@@ -747,11 +759,11 @@ class _HomeHeader extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
-                        _ForecastDay(day: 'Thu', icon: Icons.wb_sunny, temp: '45°'),
-                        _ForecastDay(day: 'Fri', icon: Icons.wb_sunny, temp: '43°'),
-                        _ForecastDay(day: 'Sat', icon: Icons.wb_sunny, temp: '38°'),
-                        _ForecastDay(day: 'Sun', icon: Icons.wb_sunny, temp: '41°'),
-                        _ForecastDay(day: 'Mon', icon: Icons.wb_sunny, temp: '36°'),
+                        _ForecastDay(day: 'Thu', icon: LucideIcons.sun, temp: '45°'),
+                        _ForecastDay(day: 'Fri', icon: LucideIcons.sun, temp: '43°'),
+                        _ForecastDay(day: 'Sat', icon: LucideIcons.sun, temp: '38°'),
+                        _ForecastDay(day: 'Sun', icon: LucideIcons.sun, temp: '41°'),
+                        _ForecastDay(day: 'Mon', icon: LucideIcons.sun, temp: '36°'),
                       ],
                     ),
                   ],
@@ -805,7 +817,7 @@ class _ForecastDay extends StatelessWidget {
 // Carré "Today's Advice" : conseil du jour avec icône pluie, titre,
 // recommandation, texte explicatif et lien vers l'analyse complète.
 class _TodayAdviceBox extends StatelessWidget {
-  const _TodayAdviceBox({super.key});
+  const _TodayAdviceBox();
 
   @override
   Widget build(BuildContext context) {
@@ -827,7 +839,7 @@ class _TodayAdviceBox extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: const Icon(
-              Icons.water_drop,
+              LucideIcons.droplet,
               size: 30,
               color: Colors.white,
             ),
@@ -880,7 +892,7 @@ class _TodayAdviceBox extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 4),
-                      Icon(Icons.arrow_forward, size: 16, color: Colors.orange),
+                      Icon(LucideIcons.arrowRight, size: 16, color: Colors.orange),
                     ],
                   ),
                 ),
