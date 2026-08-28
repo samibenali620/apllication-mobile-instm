@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../utils/languages.dart';
 import 'sidebar_page.dart';
 import '../main.dart'; // fournit teaGreen et loginGreen
+import '../widgets/adaptive_scroll_view.dart';
+import '../widgets/app_button.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -12,18 +15,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  // Langue actuelle (par défaut : français)
   String _currentLang = 'fr';
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // Liste des langues disponibles avec libellé et drapeau
-  static const List<Map<String, String>> _availableLanguages = [
-    {'code': 'fr', 'label': 'Français', 'flag': '🇫🇷'},
-    {'code': 'en', 'label': 'English', 'flag': '🇬🇧'},
-    {'code': 'ar', 'label': 'العربية', 'flag': '🇸🇦'},
-  ];
+  static const List<String> _availableLanguages = ['fr', 'en', 'ar'];
 
   @override
   void dispose() {
@@ -32,10 +29,7 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-
-
   void _handleLogin() {
-    // Navigue vers la page sidebar après connexion
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const SidebarPage()),
@@ -47,202 +41,205 @@ class _LoginState extends State<Login> {
     final isArabic = _currentLang == 'ar';
     final texts = languages[_currentLang]!;
 
-    return Directionality(
-      textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
-      child: Scaffold(
-        // Fond de page vert clair
-        backgroundColor: loginGreen,
-        appBar: AppBar(
-          backgroundColor: loginGreen,
-          elevation: 0,
-          toolbarHeight: 120,
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Colors.white,
-            statusBarIconBrightness: Brightness.dark,
-            statusBarBrightness: Brightness.light,
-          ),
-          title:  Padding(
-            padding:const EdgeInsets.only(top: 12.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-              const Text(
-              'BASSIANA',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-                letterSpacing: 1.5,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              texts['appSubtitle']!,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
-            ),
-          ],
-            ),
-          ),
-          actions: [
-            ..._availableLanguages.map((opt) {
-              final isSelected = _currentLang == opt['code'];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      _currentLang = opt['code']!;
-                    });
-                  },
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: isSelected
-                          ? Border.all(color: Colors.black87, width: 2)
-                          : null,
-                    ),
-                    child: Text(
-                      opt['flag']!,
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ],
-        ),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
+      child: Directionality(
+        textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
+        child: Scaffold(
+          backgroundColor: Colors.white,
           body: Column(
             children: [
-            // Zone verte du haut (vide, juste pour l'espace visuel)
               Expanded(
-                flex: 22, // ajuste ce chiffre pour plus/moins de vert
-                child: Container(
-                  width: double.infinity,
-                  color: loginGreen,
-                ),
-              ),
-          Expanded(
-            flex:68,
-            child: Container(
-              color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                texts['welcome back']!,
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                texts['subtitle']!,
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.black54,
-                ),
-              ),
-              const SizedBox(height: 20),
-              // Label email
-              Text(
-                texts['email']!,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 8),
-              // Rectangle (champ de texte) pour l'email
-              TextField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  hintText: texts['email'],
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 14,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Label mot de passe
-              Text(
-                texts['password']!,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 8),
-              // Rectangle (champ de texte) pour le mot de passe
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: texts['password'],
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 14,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  texts['forgotPassword']!,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.green,
+                flex: 32,
+                child: ClipPath(
+                  clipper: _WaveClipper(),
+                  child: Container(
+                    width: double.infinity,
+                    color: loginGreen,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          top: -60,
+                          right: -60,
+                          child: Container(
+                            width: 220,
+                            height: 220,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: RadialGradient(
+                                colors: [
+                                  Colors.orange.shade100.withValues(
+                                    alpha: 0.6,
+                                  ),
+                                  Colors.orange.shade100.withValues(
+                                    alpha: 0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SafeArea(
+                          bottom: false,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 34,
+                                          height: 34,
+                                          decoration: BoxDecoration(
+                                            color: Colors.green.shade800,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: const Icon(
+                                            LucideIcons.leaf,
+                                            color: Colors.white,
+                                            size: 18,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        const Text(
+                                          'BASSIANA',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 22,
+                                            letterSpacing: 1.2,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    _LanguageSwitcher(
+                                      options: _availableLanguages,
+                                      selected: _currentLang,
+                                      onSelected: (code) {
+                                        setState(() {
+                                          _currentLang = code;
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 14),
+                                Text(
+                                  texts['appSubtitle']!,
+                                  style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 14,
+                                    height: 1.3,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
-
-              // Bouton login
-              ElevatedButton(
-                onPressed: _handleLogin,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.green,
-                ),
-                child: Text(
-                  texts['login']!,
-                  style: const TextStyle(fontSize: 16),
-
-                ),
-              ),
-              const SizedBox(height: 16),
-              Center(
-                child: Text(
-                  texts['needHelp']!,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.lightGreen,
+              Expanded(
+                flex: 68,
+                child: AdaptiveScrollView(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        texts['welcome back']!,
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        texts['subtitle']!,
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        texts['email']!,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: _fieldDecoration(
+                          hint: texts['email']!,
+                          icon: LucideIcons.mail,
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Text(
+                        texts['password']!,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: _fieldDecoration(
+                          hint: texts['password']!,
+                          icon: LucideIcons.lock,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          texts['forgotPassword']!,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.green.shade700,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      AppButton(
+                        label: texts['login']!,
+                        onPressed: _handleLogin,
+                        pill: true,
+                      ),
+                      const SizedBox(height: 16),
+                      Center(
+                        child: Text(
+                          texts['needHelp']!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.black45,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -250,10 +247,113 @@ class _LoginState extends State<Login> {
           ),
         ),
       ),
-    ),
-    ],
-          ),
+    );
+  }
+
+  InputDecoration _fieldDecoration({required String hint, required IconData icon}) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: const TextStyle(color: Colors.black38),
+      prefixIcon: Icon(icon, size: 18, color: Colors.black45),
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: const EdgeInsets.symmetric(vertical: 14),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: Colors.black12),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: Colors.black12),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: Colors.green.shade600, width: 1.5),
       ),
     );
   }
+}
+
+class _LanguageSwitcher extends StatelessWidget {
+  const _LanguageSwitcher({
+    required this.options,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final List<String> options;
+  final String selected;
+  final ValueChanged<String> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: options.map((code) {
+          final isSelected = code == selected;
+          return InkWell(
+            onTap: () => onSelected(code),
+            borderRadius: BorderRadius.circular(16),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.green.shade800 : Colors.transparent,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Text(
+                code.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: isSelected ? Colors.white : Colors.black54,
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _WaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path()..lineTo(0, size.height - 40);
+
+    final firstControlPoint = Offset(size.width / 4, size.height);
+    final firstEndPoint = Offset(size.width / 2, size.height - 30);
+    path.quadraticBezierTo(
+      firstControlPoint.dx,
+      firstControlPoint.dy,
+      firstEndPoint.dx,
+      firstEndPoint.dy,
+    );
+
+    final secondControlPoint = Offset(
+      size.width - (size.width / 4),
+      size.height - 65,
+    );
+    final secondEndPoint = Offset(size.width, size.height - 20);
+    path.quadraticBezierTo(
+      secondControlPoint.dx,
+      secondControlPoint.dy,
+      secondEndPoint.dx,
+      secondEndPoint.dy,
+    );
+
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
