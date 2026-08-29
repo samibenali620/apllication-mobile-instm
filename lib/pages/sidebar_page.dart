@@ -6,6 +6,9 @@ import '../main.dart'; // fournit teaGreen
 import '../widgets/app_scrollbar.dart';
 import '../widgets/app_button.dart';
 import '../services/weatherservice.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import '../widgets/adaptive_scroll_view.dart';
 class SidebarPage extends StatefulWidget {
   const SidebarPage({super.key});
 
@@ -1093,6 +1096,35 @@ class _NewObservationPageState extends State<_NewObservationPage> {
 
   final List<String> _crops = ['Olive', 'Wheat', 'Citrus', 'Tomato'];
   int _selectedCropIndex = 0;
+  // ── Soil type ──
+  final List<String> _soilTypes = ['Sandy', 'Loamy', 'Clay'];
+  int _selectedSoilTypeIndex = 0;
+
+// ── Field size ──
+  double _fieldSize = 3.2;
+
+  // 👉 COLLE ICI ton bloc :
+  // ── Photo ──
+  File? _selectedPhoto;
+  // ── Notes ──
+  final TextEditingController _notesController = TextEditingController();
+
+  @override
+  void dispose() {
+    _notesController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickPhoto() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.camera);
+    if (picked != null) {
+      setState(() {
+        _selectedPhoto = File(picked.path);
+      });
+    }
+  }
+
 
   void _goLeft() {
     if (_selectedIndex > 0) {
@@ -1147,10 +1179,37 @@ class _NewObservationPageState extends State<_NewObservationPage> {
       ),
     );
   }
-
+  Widget _buildSoilTypeBox(int index) {
+    final isSelected = index == _selectedSoilTypeIndex;
+    return Expanded(
+      child: InkWell(
+        onTap: () => setState(() => _selectedSoilTypeIndex = index),
+        borderRadius: BorderRadius.circular(30),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.green.shade900 : Colors.white,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(
+              color: isSelected ? Colors.green.shade900 : Colors.black12,
+            ),
+          ),
+          child: Text(
+            _soilTypes[index],
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: isSelected ? Colors.white : Colors.black87,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return AdaptiveScrollView (
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1354,7 +1413,250 @@ class _NewObservationPageState extends State<_NewObservationPage> {
               ],
             ),
           ),
-        ],
+
+        const SizedBox(height: 28),
+
+// ── Soil type ────────────────────────────────────────────
+        Row(
+          children: const [
+            Icon(LucideIcons.layers, size: 20, color: Colors.black87),
+            SizedBox(width: 8),
+            Text(
+              'Soil type',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            _buildSoilTypeBox(0),
+            const SizedBox(width: 10),
+            _buildSoilTypeBox(1),
+            const SizedBox(width: 10),
+            _buildSoilTypeBox(2),
+          ],
+        ),
+        const SizedBox(height: 28),
+
+// ── Field size ───────────────────────────────────────────
+        Row(
+          children: [
+            const Icon(LucideIcons.frame, size: 20, color: Colors.black87),
+            const SizedBox(width: 8),
+            const Expanded(
+              child: Text(
+                'Field size (ha)',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  _fieldSize = (_fieldSize - 0.1).clamp(0.0, 999.0);
+                });
+              },
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                width: 36,
+                height: 36,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.green.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.remove, size: 18, color: Colors.black87),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              _fieldSize.toStringAsFixed(1),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(width: 12),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  _fieldSize = (_fieldSize + 0.1).clamp(0.0, 999.0);
+                });
+              },
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                width: 36,
+                height: 36,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.green.shade900,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.add, size: 18, color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+          const SizedBox(height: 28),
+
+// ── Add a photo ─────────────────────────────────────────
+          Row(
+            children: const [
+              Icon(LucideIcons.camera, size: 20, color: Colors.black87),
+              SizedBox(width: 8),
+              Text(
+                'Add a photo',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(width: 6),
+              Text(
+                '(optional)',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black45,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          InkWell(
+            onTap: _pickPhoto,
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              width: double.infinity,
+              height: 160,
+              decoration: BoxDecoration(
+                color: Colors.green.shade50,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Colors.green.shade200,
+                  width: 1.2,
+                ),
+              ),
+              child: _selectedPhoto == null
+                  ? Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      LucideIcons.camera,
+                      size: 32,
+                      color: Colors.green.shade700,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Tap to take or upload a photo',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.green.shade700,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+                  : ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.file(
+                  _selectedPhoto!,
+                  width: double.infinity,
+                  height: 160,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 28),
+
+// ── Notes ────────────────────────────────────────────────
+          Row(
+            children: const [
+              Text(
+                'Notes',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(width: 6),
+              Text(
+                '(optional)',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black45,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.black12),
+            ),
+            child: TextField(
+              controller: _notesController,
+              maxLines: 3,
+              decoration: const InputDecoration(
+                hintText: 'Anything else to mention?',
+                hintStyle: TextStyle(color: Colors.black38),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+
+// ── Analyze button ───────────────────────────────────────
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                // TODO: lancer l'analyse avec toutes les données collectées
+                // plot: _plots[_selectedIndex]
+                // crop: _crops[_selectedCropIndex]
+                // moisture: _soilMoisture
+                // soilType: _soilTypes[_selectedSoilTypeIndex]
+                // fieldSize: _fieldSize
+                // photo: _selectedPhoto
+                // notes: _notesController.text
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green.shade900,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                elevation: 0,
+              ),
+              child: const Text(
+                'Analyze & Get Advice',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+    ],
       ),
     );
   }
