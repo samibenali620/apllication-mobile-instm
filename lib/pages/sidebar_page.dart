@@ -39,9 +39,7 @@ class _SidebarPageState extends State<SidebarPage> {
       ),
     ),
     const _NewObservationPage(),
-    const Center(
-      child: Text('Page Résultat', style: TextStyle(fontSize: 18)),
-    ),
+    const _ResultPage(),
     const _HistoryPage(),
     _ProfilePage(onLogout: _handleLogout),
   ];
@@ -1657,6 +1655,178 @@ class _NewObservationPageState extends State<_NewObservationPage> {
             ),
           ),
     ],
+      ),
+    );
+  }
+}
+// Page Résultat : affiche le statut d'irrigation et les données du sol
+class _ResultPage extends StatelessWidget {
+  const _ResultPage();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppScrollbar(
+      builder: (context, controller) => ListView(
+        controller: controller,
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        children: [
+          // ── Sous-titre "Plot A — Olive Grove · Today" ──
+          Row(
+            children: const [
+              Icon(LucideIcons.mapPin, size: 16, color: Colors.black54),
+              SizedBox(width: 4),
+              Text(
+                'Plot A — Olive Grove · Today',
+                style: TextStyle(fontSize: 14, color: Colors.black54),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // ── Carte orange "Irrigate Now" ──
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.orange.shade700, Colors.brown.shade600],
+              ),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.25),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                    'NEEDS ATTENTION',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Container(
+                  width: 64,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    LucideIcons.droplet,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Irrigate Now',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Best time: within the next 24 hours',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // ── Carte blanche des statistiques ──
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.black12),
+            ),
+            child: Column(
+              children: [
+                _buildStatRow(
+                  dotColor: Colors.orange.shade700,
+                  icon: LucideIcons.droplet,
+                  label: 'Soil Moisture',
+                  value: '32% · Low',
+                  valueColor: Colors.orange.shade700,
+                  showBorder: true,
+                ),
+                _buildStatRow(
+                  dotColor: Colors.grey,
+                  icon: LucideIcons.home,
+                  label: 'Soil Quality',
+                  value: 'Sandy, fast-draining',
+                  valueColor: Colors.black87,
+                  showBorder: true,
+                ),
+                _buildStatRow(
+                  dotColor: Colors.orange.shade700,
+                  icon: LucideIcons.sun,
+                  label: 'Weather Ahead',
+                  value: 'Dry, 31°C avg',
+                  valueColor: Colors.orange.shade700,
+                  showBorder: false,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatRow({
+    required Color dotColor,
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color valueColor,
+    required bool showBorder,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      decoration: BoxDecoration(
+        border: showBorder
+            ? const Border(bottom: BorderSide(color: Colors.black12))
+            : null,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
+              ),
+              const SizedBox(width: 10),
+              Icon(icon, size: 18, color: Colors.black54),
+              const SizedBox(width: 8),
+              Text(label, style: const TextStyle(fontSize: 15, color: Colors.black87)),
+            ],
+          ),
+          Text(
+            value,
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: valueColor),
+          ),
+        ],
       ),
     );
   }
