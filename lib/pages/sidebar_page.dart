@@ -1660,6 +1660,7 @@ class _NewObservationPageState extends State<_NewObservationPage> {
   }
 }
 // Page Résultat : affiche le statut d'irrigation et les données du sol
+// Page Résultat : affiche le statut d'irrigation et les données du sol
 class _ResultPage extends StatelessWidget {
   const _ResultPage();
 
@@ -1786,6 +1787,44 @@ class _ResultPage extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 20),
+
+          // ── "Why this matters" ──
+          const Text(
+            'Why this matters',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'Your soil is drying faster than usual for sandy ground, and the coming days stay hot and dry. '
+                'Irrigating now will protect root development before stress sets in.',
+            style: TextStyle(
+              fontSize: 14,
+              height: 1.5,
+              color: Colors.black54,
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // ── "What to do" ──
+          const Text(
+            'What to do',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildChecklistItem('Irrigate within the next 24 hours'),
+          const SizedBox(height: 12),
+          _buildChecklistItem('Use light, frequent watering — sandy soil drains fast'),
+          const SizedBox(height: 12),
+          _buildChecklistItem('Recheck soil moisture in 3 days'),
         ],
       ),
     );
@@ -1830,5 +1869,38 @@ class _ResultPage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildChecklistItem(String text) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            color: Colors.green.shade100,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            LucideIcons.check,
+            size: 14,
+            color: Colors.green.shade900,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+              height: 1.4,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
+
 
