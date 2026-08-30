@@ -470,18 +470,27 @@ class _HistoryPage extends StatelessWidget {
                 subtitle: 'August 20, 2026',
                 badgeLabel: 'Irrigate Now',
                 badgeColor: Colors.red,
+                icon: LucideIcons.droplet,
+                iconBackground: Colors.orange.shade100,
+                iconColor: Colors.orange.shade700,
               ),
               _PlotHistoryCard(
                 title: 'Plot B – Wheat Field',
                 subtitle: 'August 14, 2026',
                 badgeLabel: 'Good Conditions',
                 badgeColor: Colors.green,
+                icon: LucideIcons.check,
+                iconBackground: Colors.green.shade100,
+                iconColor: Colors.green.shade900,
               ),
               _PlotHistoryCard(
                 title: 'Plot C – Citrus',
                 subtitle: 'August 6, 2026',
                 badgeLabel: 'Sow Now',
                 badgeColor: Colors.green,
+                icon: LucideIcons.sprout,
+                iconBackground: Colors.green.shade100,
+                iconColor: Colors.green.shade900,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 4, left: 4),
@@ -499,12 +508,18 @@ class _HistoryPage extends StatelessWidget {
                 subtitle: 'Jul 29, 2026',
                 badgeLabel: 'Irrigate Now',
                 badgeColor: Colors.red,
+                icon: LucideIcons.droplet,
+                iconBackground: Colors.red.shade100,
+                iconColor: Colors.red.shade700,
               ),
               _PlotHistoryCard(
                 title: 'Plot B – Wheat Field',
                 subtitle: 'Jul 18, 2026',
                 badgeLabel: 'Good Conditions',
                 badgeColor: Colors.green,
+                icon: LucideIcons.check,
+                iconBackground: Colors.green.shade100,
+                iconColor: Colors.green.shade900,
               ),
             ],
             ),
@@ -560,12 +575,20 @@ class _PlotHistoryCard extends StatelessWidget {
   final String subtitle;
   final String badgeLabel;
   final Color badgeColor;
+  final IconData icon;
+  final Color iconBackground;
+  final Color iconColor;
+
 
   const _PlotHistoryCard({
     required this.title,
     required this.subtitle,
     required this.badgeLabel,
     required this.badgeColor,
+    required this.icon,
+    required this.iconBackground,
+    required this.iconColor,
+
   }
       );
 
@@ -581,6 +604,17 @@ class _PlotHistoryCard extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // ── Carré icône ──
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: iconBackground,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: iconColor, size: 22),
+          ),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
