@@ -1661,15 +1661,16 @@ class _NewObservationPageState extends State<_NewObservationPage> {
 }
 // Page Résultat : affiche le statut d'irrigation et les données du sol
 // Page Résultat : affiche le statut d'irrigation et les données du sol
+// Page Résultat : affiche le statut d'irrigation et les données du sol
 class _ResultPage extends StatelessWidget {
   const _ResultPage();
 
   @override
   Widget build(BuildContext context) {
-    return AppScrollbar(
-      builder: (context, controller) => ListView(
-        controller: controller,
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+    return AdaptiveScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // ── Sous-titre "Plot A — Olive Grove · Today" ──
           Row(
@@ -1701,7 +1702,7 @@ class _ResultPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.25),
+                    color: Colors.white.withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Text(
@@ -1719,7 +1720,7 @@ class _ResultPage extends StatelessWidget {
                   width: 64,
                   height: 64,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -1742,7 +1743,7 @@ class _ResultPage extends StatelessWidget {
                   'Best time: within the next 24 hours',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                   ),
                 ),
               ],
@@ -1825,6 +1826,28 @@ class _ResultPage extends StatelessWidget {
           _buildChecklistItem('Use light, frequent watering — sandy soil drains fast'),
           const SizedBox(height: 12),
           _buildChecklistItem('Recheck soil moisture in 3 days'),
+          const SizedBox(height: 28),
+
+          // ── Bouton "Save to History" ──
+          AppButton(
+            label: 'Save to History',
+            icon: LucideIcons.save,
+            variant: AppButtonVariant.primary,
+            onPressed: () {
+              // TODO: sauvegarder ce résultat dans l'historique
+            },
+          ),
+          const SizedBox(height: 12),
+
+          // ── Bouton "New Observation" ──
+          AppButton(
+            label: 'New Observation',
+            icon: LucideIcons.plus,
+            variant: AppButtonVariant.outline,
+            onPressed: () {
+              // TODO: naviguer vers l'onglet "New Observation"
+            },
+          ),
         ],
       ),
     );
@@ -1902,5 +1925,7 @@ class _ResultPage extends StatelessWidget {
     );
   }
 }
+
+
 
 
