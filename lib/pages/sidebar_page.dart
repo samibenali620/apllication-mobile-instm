@@ -2000,6 +2000,7 @@ class _ResultPage extends StatelessWidget {
             color: Colors.green.shade900,
           ),
         ),
+
         const SizedBox(width: 12),
         Expanded(
           child: Text(
