@@ -9,6 +9,7 @@ import '../services/weatherservice.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import '../widgets/adaptive_scroll_view.dart';
+
 class SidebarPage extends StatefulWidget {
   const SidebarPage({super.key});
 
@@ -21,12 +22,12 @@ class _SidebarPageState extends State<SidebarPage> {
   int _selectedIndex = 0;
 
   // Titres correspondant à chaque page (affichés dans l'AppBar)
-  final List<String> _titles = const [
-    'Home',
-    'Nouvelle Observation',
-    'Résultat',
-    'Historique',
-    'Profil',
+  final List<String> _titlesKeys= const [
+    'nav Home',
+    'nav Nouvelle Observation',
+    'nav Résultat',
+    'nav Historique',
+    'nav Profil',
   ];
 
   // Contenu de chaque page (à remplacer plus tard par vos vraies pages)
@@ -78,7 +79,7 @@ class _SidebarPageState extends State<SidebarPage> {
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.light,
         ),
-        title: Text(_titles[_selectedIndex]),
+        title: Text(context.tr(_titlesKeys[_selectedIndex])),
       ),
       drawer: Drawer(
         backgroundColor: teaGreen,
@@ -86,11 +87,11 @@ class _SidebarPageState extends State<SidebarPage> {
           children: [
             DrawerHeader(
               decoration: const BoxDecoration(color: teaGreen),
-              child: const Align(
+              child:  Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
-                  'Menu',
-                  style: TextStyle(
+                  context.tr('drawer_menu'),
+                  style: const TextStyle(
                     color: Colors.black87,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -109,7 +110,7 @@ class _SidebarPageState extends State<SidebarPage> {
                         color: _selectedIndex == 0
                             ? Colors.green
                             : Colors.black87),
-                    title: Text('Home',
+                    title: Text(context.tr('nav_home'),
                         style: TextStyle(
                           color: _selectedIndex == 0
                               ? Colors.green
@@ -127,7 +128,7 @@ class _SidebarPageState extends State<SidebarPage> {
                         color: _selectedIndex == 1
                             ? Colors.green
                             : Colors.black87),
-                    title: Text('New Observation',
+                    title: Text(context.tr('nav_newObservation'),
                         style: TextStyle(
                           color: _selectedIndex == 1
                               ? Colors.green
@@ -145,7 +146,7 @@ class _SidebarPageState extends State<SidebarPage> {
                         color: _selectedIndex == 2
                             ? Colors.green
                             : Colors.black87),
-                    title: Text('Result',
+                    title: Text(context.tr('nav_result'),
                         style: TextStyle(
                           color: _selectedIndex == 2
                               ? Colors.green
@@ -163,7 +164,7 @@ class _SidebarPageState extends State<SidebarPage> {
                         color: _selectedIndex == 3
                             ? Colors.green
                             : Colors.black87),
-                    title: Text('History',
+                    title: Text(context.tr('nav_history'),
                         style: TextStyle(
                           color: _selectedIndex == 3
                               ? Colors.green
@@ -181,7 +182,7 @@ class _SidebarPageState extends State<SidebarPage> {
                         color: _selectedIndex == 4
                             ? Colors.green
                             : Colors.black87),
-                    title: Text('Profile',
+                    title: Text(context.tr('nav_profile'),
                         style: TextStyle(
                           color: _selectedIndex == 4
                               ? Colors.green
@@ -241,26 +242,26 @@ class _SidebarPageState extends State<SidebarPage> {
                 showUnselectedLabels: true,
                 selectedFontSize: 12,
                 unselectedFontSize: 12,
-                items: const [
+                items: [
                   BottomNavigationBarItem(
                     icon: Icon(LucideIcons.home),
-                    label: 'Home',
+                    label:context.tr('nav_home'),
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(LucideIcons.plus),
-                    label: 'Observe',
+                    label: context.tr('nav_newObservation_short'),
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(LucideIcons.clipboardCheck),
-                    label: 'Result',
+                    label: context.tr('nav_result'),
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(LucideIcons.history),
-                    label: 'History',
+                    label:  context.tr('nav_history'),
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(LucideIcons.user),
-                    label: 'Profil',
+                    label:  context.tr('nav_profile'),
                   ),
                 ],
               ),
@@ -301,7 +302,7 @@ class _ProfilePage extends StatelessWidget {
                   // TODO: brancher la sélection/upload de photo
                 },
                 icon: const Icon(LucideIcons.camera, size: 16),
-                label: const Text('Changer la photo'),
+                label:  Text(context.tr('profile_changePhoto')),
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                   minimumSize: const Size(0, 0),
@@ -310,12 +311,12 @@ class _ProfilePage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Nom Utilisateur',
+                context.tr('nom d utilisateur'),
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
               const Text(
-                'utilisateur@email.com',
+                context.tr('profile_defaultEmail'),
                 style: TextStyle(fontSize: 14, color: Colors.black54),
               ),
             ],
@@ -337,15 +338,15 @@ class _ProfilePage extends StatelessWidget {
               ListTile(
                 dense: true,
                 leading: Icon(LucideIcons.phone),
-                title: Text('Téléphone'),
-                subtitle: Text('+216 00 000 000'),
+                title: Text(context.tr('profile_phone')),
+                subtitle: Text(context.tr('profile_phoneValue')),
               ),
               Divider(height: 1),
               ListTile(
                 dense: true,
                 leading: Icon(LucideIcons.mapPin),
-                title: Text('Localisation'),
-                subtitle: Text('Tunis, Tunisie'),
+                title: Text(context.tr('profile_location')),
+                subtitle: Text(context.tr('profile_locationValue')),
               ),
             ],
           ),
@@ -366,7 +367,7 @@ class _ProfilePage extends StatelessWidget {
               ListTile(
                 dense: true,
                 leading: const Icon(LucideIcons.squarePen),
-                title: const Text('Modifier le profil'),
+                title:Text(context.tr('profile_editProfile')),
                 trailing: const Icon(LucideIcons.chevronRight),
                 onTap: () {
                   // TODO: naviguer vers l'écran de modification de profil
@@ -376,7 +377,7 @@ class _ProfilePage extends StatelessWidget {
               ListTile(
                 dense: true,
                 leading: const Icon(LucideIcons.lockKeyhole),
-                title: const Text('Changer le mot de passe'),
+                title:  Text(context.tr('profile_changePassword')),
                 trailing: const Icon(LucideIcons.chevronRight),
                 onTap: () {
                   // TODO: naviguer vers l'écran de changement de mot de passe
@@ -386,7 +387,7 @@ class _ProfilePage extends StatelessWidget {
               ListTile(
                 dense: true,
                 leading: const Icon(LucideIcons.languages),
-                title: const Text('Langue'),
+                title: Text(context.tr('profile_changePassword')),
                 trailing: const Icon(LucideIcons.chevronRight),
                 onTap: () {
                   // TODO: ouvrir le sélecteur de langue
@@ -396,7 +397,48 @@ class _ProfilePage extends StatelessWidget {
               ListTile(
                 dense: true,
                 leading: const Icon(LucideIcons.info),
-                title: const Text('À propos de Bassiana'),
+                title:Text(context.tr('profile_language')) ,
+                trailing: const Icon(LucideIcons.chevronRight),
+                onTap: () {
+                  // Exemple simple de sélecteur de langue
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (ctx) => SafeArea(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            title: const Text('Français'),
+                            onTap: () {
+                              LanguageService.instance.setLanguage('fr');
+                              Navigator.pop(ctx);
+                            },
+                          ),
+                          ListTile(
+                            title: const Text('English'),
+                            onTap: () {
+                              LanguageService.instance.setLanguage('en');
+                              Navigator.pop(ctx);
+                            },
+                          ),
+                          ListTile(
+                            title: const Text('العربية'),
+                            onTap: () {
+                              LanguageService.instance.setLanguage('ar');
+                              Navigator.pop(ctx);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const Divider(height: 1),
+              ListTile(
+                dense: true,
+                leading: const Icon(LucideIcons.info),
+                title: Text(context.tr('profile_about')),
                 trailing: const Icon(LucideIcons.chevronRight),
                 onTap: () {
                   // TODO: afficher les infos de l'application
@@ -409,7 +451,7 @@ class _ProfilePage extends StatelessWidget {
 
         // Déconnexion
         AppButton(
-          label: 'Déconnexion',
+          label: context.tr('profile_logout'),
           icon: LucideIcons.logOut,
           variant: AppButtonVariant.danger,
           onPressed: onLogout,
@@ -434,14 +476,14 @@ class _HistoryPage extends StatelessWidget {
           child: Row(
             children: [
               _FilterBox(
-                label: 'All plts',
+                label: context.tr('history_filterAllPlots'),
                 onTap: () {
                   // TODO: ouvrir le sélecteur de plantes
                 },
               ),
               const SizedBox(width: 10),
               _FilterBox(
-                label: 'Last 30 days',
+                label: context.tr('history_filterLast30Days'),
                 onTap: () {
                   // TODO: ouvrir le sélecteur de période
                 },
@@ -452,7 +494,7 @@ class _HistoryPage extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.fromLTRB(16, 4, 16, 8),
           child: Text(
-            'August 2026',
+            context.tr('history_month_august2026'),
             style: TextStyle(
               fontSize: 14,
               color: Colors.black87,
@@ -468,7 +510,7 @@ class _HistoryPage extends StatelessWidget {
               _PlotHistoryCard(
                 title: 'Plot A – Olive Grove',
                 subtitle: 'August 20, 2026',
-                badgeLabel: 'Irrigate Now',
+                badgeLabel: context.tr('history_badge_irrigateNow'),
                 badgeColor: Colors.red,
                 icon: LucideIcons.droplet,
                 iconBackground: Colors.orange.shade100,
