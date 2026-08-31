@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import '../utils/languages.dart';
+import 'languages.dart';
+import 'language_service.dart';
 import 'sidebar_page.dart';
 import '../main.dart'; // fournit teaGreen et loginGreen
 import '../widgets/adaptive_scroll_view.dart';
@@ -15,8 +16,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String _currentLang = 'fr';
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -38,8 +37,12 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final isArabic = _currentLang == 'ar';
-    final texts = languages[_currentLang]!;
+    // On s'abonne au LanguageScope : dès que LanguageService.instance
+    // change de langue (ici ou ailleurs dans l'app), ce widget se
+    // reconstruit automatiquement avec la nouvelle langue.
+    final currentLang = LanguageScope.of(context).currentLang;
+    final isArabic = currentLang == 'ar';
+    final texts = languages[currentLang]!;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -92,7 +95,7 @@ class _LoginState extends State<Login> {
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -102,7 +105,7 @@ class _LoginState extends State<Login> {
                                           decoration: BoxDecoration(
                                             color: Colors.green.shade800,
                                             borderRadius:
-                                                BorderRadius.circular(10),
+                                            BorderRadius.circular(10),
                                           ),
                                           child: const Icon(
                                             LucideIcons.leaf,
@@ -124,11 +127,12 @@ class _LoginState extends State<Login> {
                                     ),
                                     _LanguageSwitcher(
                                       options: _availableLanguages,
-                                      selected: _currentLang,
+                                      selected: currentLang,
                                       onSelected: (code) {
-                                        setState(() {
-                                          _currentLang = code;
-                                        });
+                                        // Met à jour le service global : toute
+                                        // l'app (login + sidebar) se
+                                        // synchronise automatiquement.
+                                        LanguageService.instance.setLanguage(code);
                                       },
                                     ),
                                   ],

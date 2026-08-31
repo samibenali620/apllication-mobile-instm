@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'pages/login.dart';
+import 'pages/language_service.dart';
+
 
 // Couleurs partagées de l'application — un seul endroit à modifier
 const Color teaGreen = Color(0xFFD0F0C0); // vert thé (sidebar)
 const Color loginGreen = Color(0xFFE3F5DC); // vert plus clair (fond login)
 
 void main() {
-  runApp(const MyApp());
+  runApp( LanguageScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

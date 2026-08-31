@@ -9,6 +9,7 @@ import '../services/weatherservice.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import '../widgets/adaptive_scroll_view.dart';
+import 'language_service.dart';
 
 class SidebarPage extends StatefulWidget {
   const SidebarPage({super.key});
@@ -21,17 +22,16 @@ class _SidebarPageState extends State<SidebarPage> {
   // Index de la page actuellement sélectionnée
   int _selectedIndex = 0;
 
-  // Titres correspondant à chaque page (affichés dans l'AppBar)
-  final List<String> _titlesKeys= const [
-    'nav Home',
-    'nav Nouvelle Observation',
-    'nav Résultat',
-    'nav Historique',
-    'nav Profil',
+  // Clés de traduction correspondant à chaque page (affichées dans l'AppBar)
+  final List<String> _titleKeys = const [
+    'nav_home',
+    'nav_newObservation',
+    'nav_result',
+    'nav_history',
+    'nav_profile',
   ];
 
   // Contenu de chaque page (à remplacer plus tard par vos vraies pages)
-  // To this:
   List<Widget> get _pages => [
     AppScrollbar(
       builder: (context, controller) => SingleChildScrollView(
@@ -79,7 +79,7 @@ class _SidebarPageState extends State<SidebarPage> {
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.light,
         ),
-        title: Text(context.tr(_titlesKeys[_selectedIndex])),
+        title: Text(context.tr(_titleKeys[_selectedIndex])),
       ),
       drawer: Drawer(
         backgroundColor: teaGreen,
@@ -87,7 +87,7 @@ class _SidebarPageState extends State<SidebarPage> {
           children: [
             DrawerHeader(
               decoration: const BoxDecoration(color: teaGreen),
-              child:  Align(
+              child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
                   context.tr('drawer_menu'),
@@ -102,100 +102,100 @@ class _SidebarPageState extends State<SidebarPage> {
             Expanded(
               child: AppScrollbar(
                 builder: (context, controller) => ListView(
-                controller: controller,
-                padding: EdgeInsets.zero,
-                children: [
-                  ListTile(
-                    leading: Icon(LucideIcons.home,
-                        color: _selectedIndex == 0
-                            ? Colors.green
-                            : Colors.black87),
-                    title: Text(context.tr('nav_home'),
-                        style: TextStyle(
+                  controller: controller,
+                  padding: EdgeInsets.zero,
+                  children: [
+                    ListTile(
+                      leading: Icon(LucideIcons.home,
                           color: _selectedIndex == 0
                               ? Colors.green
-                              : Colors.black87,
-                          fontWeight: _selectedIndex == 0
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        )),
-                    selected: _selectedIndex == 0,
-                    selectedTileColor: Colors.white,
-                    onTap: () => _onItemSelected(0),
-                  ),
-                  ListTile(
-                    leading: Icon(LucideIcons.plus,
-                        color: _selectedIndex == 1
-                            ? Colors.green
-                            : Colors.black87),
-                    title: Text(context.tr('nav_newObservation'),
-                        style: TextStyle(
+                              : Colors.black87),
+                      title: Text(context.tr('nav_home'),
+                          style: TextStyle(
+                            color: _selectedIndex == 0
+                                ? Colors.green
+                                : Colors.black87,
+                            fontWeight: _selectedIndex == 0
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          )),
+                      selected: _selectedIndex == 0,
+                      selectedTileColor: Colors.white,
+                      onTap: () => _onItemSelected(0),
+                    ),
+                    ListTile(
+                      leading: Icon(LucideIcons.plus,
                           color: _selectedIndex == 1
                               ? Colors.green
-                              : Colors.black87,
-                          fontWeight: _selectedIndex == 1
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        )),
-                    selected: _selectedIndex == 1,
-                    selectedTileColor: Colors.white,
-                    onTap: () => _onItemSelected(1),
-                  ),
-                  ListTile(
-                    leading: Icon(LucideIcons.clipboardCheck,
-                        color: _selectedIndex == 2
-                            ? Colors.green
-                            : Colors.black87),
-                    title: Text(context.tr('nav_result'),
-                        style: TextStyle(
+                              : Colors.black87),
+                      title: Text(context.tr('nav_newObservation'),
+                          style: TextStyle(
+                            color: _selectedIndex == 1
+                                ? Colors.green
+                                : Colors.black87,
+                            fontWeight: _selectedIndex == 1
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          )),
+                      selected: _selectedIndex == 1,
+                      selectedTileColor: Colors.white,
+                      onTap: () => _onItemSelected(1),
+                    ),
+                    ListTile(
+                      leading: Icon(LucideIcons.clipboardCheck,
                           color: _selectedIndex == 2
                               ? Colors.green
-                              : Colors.black87,
-                          fontWeight: _selectedIndex == 2
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        )),
-                    selected: _selectedIndex == 2,
-                    selectedTileColor: Colors.white,
-                    onTap: () => _onItemSelected(2),
-                  ),
-                  ListTile(
-                    leading: Icon(LucideIcons.history,
-                        color: _selectedIndex == 3
-                            ? Colors.green
-                            : Colors.black87),
-                    title: Text(context.tr('nav_history'),
-                        style: TextStyle(
+                              : Colors.black87),
+                      title: Text(context.tr('nav_result'),
+                          style: TextStyle(
+                            color: _selectedIndex == 2
+                                ? Colors.green
+                                : Colors.black87,
+                            fontWeight: _selectedIndex == 2
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          )),
+                      selected: _selectedIndex == 2,
+                      selectedTileColor: Colors.white,
+                      onTap: () => _onItemSelected(2),
+                    ),
+                    ListTile(
+                      leading: Icon(LucideIcons.history,
                           color: _selectedIndex == 3
                               ? Colors.green
-                              : Colors.black87,
-                          fontWeight: _selectedIndex == 3
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        )),
-                    selected: _selectedIndex == 3,
-                    selectedTileColor: Colors.white,
-                    onTap: () => _onItemSelected(3),
-                  ),
-                  ListTile(
-                    leading: Icon(LucideIcons.user,
-                        color: _selectedIndex == 4
-                            ? Colors.green
-                            : Colors.black87),
-                    title: Text(context.tr('nav_profile'),
-                        style: TextStyle(
+                              : Colors.black87),
+                      title: Text(context.tr('nav_history'),
+                          style: TextStyle(
+                            color: _selectedIndex == 3
+                                ? Colors.green
+                                : Colors.black87,
+                            fontWeight: _selectedIndex == 3
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          )),
+                      selected: _selectedIndex == 3,
+                      selectedTileColor: Colors.white,
+                      onTap: () => _onItemSelected(3),
+                    ),
+                    ListTile(
+                      leading: Icon(LucideIcons.user,
                           color: _selectedIndex == 4
                               ? Colors.green
-                              : Colors.black87,
-                          fontWeight: _selectedIndex == 4
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        )),
-                    selected: _selectedIndex == 4,
-                    selectedTileColor: Colors.white,
-                    onTap: () => _onItemSelected(4),
-                  ),
-                ],
+                              : Colors.black87),
+                      title: Text(context.tr('nav_profile'),
+                          style: TextStyle(
+                            color: _selectedIndex == 4
+                                ? Colors.green
+                                : Colors.black87,
+                            fontWeight: _selectedIndex == 4
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          )),
+                      selected: _selectedIndex == 4,
+                      selectedTileColor: Colors.white,
+                      onTap: () => _onItemSelected(4),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -206,7 +206,7 @@ class _SidebarPageState extends State<SidebarPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: AppButton(
-                  label: 'Déconnexion',
+                  label: context.tr('drawer_logout'),
                   icon: LucideIcons.logOut,
                   variant: AppButtonVariant.danger,
                   onPressed: _handleLogout,
@@ -244,24 +244,24 @@ class _SidebarPageState extends State<SidebarPage> {
                 unselectedFontSize: 12,
                 items: [
                   BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.home),
-                    label:context.tr('nav_home'),
+                    icon: const Icon(LucideIcons.home),
+                    label: context.tr('nav_home'),
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.plus),
+                    icon: const Icon(LucideIcons.plus),
                     label: context.tr('nav_newObservation_short'),
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.clipboardCheck),
+                    icon: const Icon(LucideIcons.clipboardCheck),
                     label: context.tr('nav_result'),
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.history),
-                    label:  context.tr('nav_history'),
+                    icon: const Icon(LucideIcons.history),
+                    label: context.tr('nav_history'),
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.user),
-                    label:  context.tr('nav_profile'),
+                    icon: const Icon(LucideIcons.user),
+                    label: context.tr('nav_profile'),
                   ),
                 ],
               ),
@@ -284,183 +284,174 @@ class _ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScrollbar(
       builder: (context, controller) => ListView(
-      controller: controller,
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-      children: [
-        // Nom + photo de profil + email (nom au-dessus de la photo)
-        Center(
-          child: Column(
-            children: [
-              const CircleAvatar(
-                radius: 45,
-                backgroundColor: teaGreen,
-                child: Icon(LucideIcons.user, size: 55, color: Colors.black54),
-              ),
-              const SizedBox(height: 2),
-              TextButton.icon(
-                onPressed: () {
-                  // TODO: brancher la sélection/upload de photo
-                },
-                icon: const Icon(LucideIcons.camera, size: 16),
-                label:  Text(context.tr('profile_changePhoto')),
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: const Size(0, 0),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        controller: controller,
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+        children: [
+          // Nom + photo de profil + email (nom au-dessus de la photo)
+          Center(
+            child: Column(
+              children: [
+                const CircleAvatar(
+                  radius: 45,
+                  backgroundColor: teaGreen,
+                  child: Icon(LucideIcons.user, size: 55, color: Colors.black54),
                 ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                context.tr('nom d utilisateur'),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                context.tr('profile_defaultEmail'),
-                style: TextStyle(fontSize: 14, color: Colors.black54),
-              ),
-            ],
+                const SizedBox(height: 2),
+                TextButton.icon(
+                  onPressed: () {
+                    // TODO: brancher la sélection/upload de photo
+                  },
+                  icon: const Icon(LucideIcons.camera, size: 16),
+                  label: Text(context.tr('profile_changePhoto')),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  context.tr('profile_defaultName'),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  context.tr('profile_defaultEmail'),
+                  style: const TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: 14),
+          const SizedBox(height: 14),
 
-        // Premier carré : informations personnelles (téléphone + localisation)
-        Card(
-          elevation: 0,
-          color: Colors.white,
-          margin: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: const BorderSide(color: Colors.black12),
+          // Premier carré : informations personnelles (téléphone + localisation)
+          Card(
+            elevation: 0,
+            color: Colors.white,
+            margin: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.black12),
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  dense: true,
+                  leading: const Icon(LucideIcons.phone),
+                  title: Text(context.tr('profile_phone')),
+                  subtitle: Text(context.tr('profile_phoneValue')),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  dense: true,
+                  leading: const Icon(LucideIcons.mapPin),
+                  title: Text(context.tr('profile_location')),
+                  subtitle: Text(context.tr('profile_locationValue')),
+                ),
+              ],
+            ),
           ),
-          child: Column(
-            children: const [
-              ListTile(
-                dense: true,
-                leading: Icon(LucideIcons.phone),
-                title: Text(context.tr('profile_phone')),
-                subtitle: Text(context.tr('profile_phoneValue')),
-              ),
-              Divider(height: 1),
-              ListTile(
-                dense: true,
-                leading: Icon(LucideIcons.mapPin),
-                title: Text(context.tr('profile_location')),
-                subtitle: Text(context.tr('profile_locationValue')),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 14),
+          const SizedBox(height: 14),
 
-        // Deuxième carré : actions du compte
-        Card(
-          elevation: 0,
-          color: Colors.white,
-          margin: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: const BorderSide(color: Colors.black12),
-          ),
-          child: Column(
-            children: [
-              ListTile(
-                dense: true,
-                leading: const Icon(LucideIcons.squarePen),
-                title:Text(context.tr('profile_editProfile')),
-                trailing: const Icon(LucideIcons.chevronRight),
-                onTap: () {
-                  // TODO: naviguer vers l'écran de modification de profil
-                },
-              ),
-              const Divider(height: 1),
-              ListTile(
-                dense: true,
-                leading: const Icon(LucideIcons.lockKeyhole),
-                title:  Text(context.tr('profile_changePassword')),
-                trailing: const Icon(LucideIcons.chevronRight),
-                onTap: () {
-                  // TODO: naviguer vers l'écran de changement de mot de passe
-                },
-              ),
-              const Divider(height: 1),
-              ListTile(
-                dense: true,
-                leading: const Icon(LucideIcons.languages),
-                title: Text(context.tr('profile_changePassword')),
-                trailing: const Icon(LucideIcons.chevronRight),
-                onTap: () {
-                  // TODO: ouvrir le sélecteur de langue
-                },
-              ),
-              const Divider(height: 1),
-              ListTile(
-                dense: true,
-                leading: const Icon(LucideIcons.info),
-                title:Text(context.tr('profile_language')) ,
-                trailing: const Icon(LucideIcons.chevronRight),
-                onTap: () {
-                  // Exemple simple de sélecteur de langue
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (ctx) => SafeArea(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            title: const Text('Français'),
-                            onTap: () {
-                              LanguageService.instance.setLanguage('fr');
-                              Navigator.pop(ctx);
-                            },
-                          ),
-                          ListTile(
-                            title: const Text('English'),
-                            onTap: () {
-                              LanguageService.instance.setLanguage('en');
-                              Navigator.pop(ctx);
-                            },
-                          ),
-                          ListTile(
-                            title: const Text('العربية'),
-                            onTap: () {
-                              LanguageService.instance.setLanguage('ar');
-                              Navigator.pop(ctx);
-                            },
-                          ),
-                        ],
+          // Deuxième carré : actions du compte
+          Card(
+            elevation: 0,
+            color: Colors.white,
+            margin: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.black12),
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  dense: true,
+                  leading: const Icon(LucideIcons.squarePen),
+                  title: Text(context.tr('profile_editProfile')),
+                  trailing: const Icon(LucideIcons.chevronRight),
+                  onTap: () {
+                    // TODO: naviguer vers l'écran de modification de profil
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  dense: true,
+                  leading: const Icon(LucideIcons.lockKeyhole),
+                  title: Text(context.tr('profile_changePassword')),
+                  trailing: const Icon(LucideIcons.chevronRight),
+                  onTap: () {
+                    // TODO: naviguer vers l'écran de changement de mot de passe
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  dense: true,
+                  leading: const Icon(LucideIcons.languages),
+                  title: Text(context.tr('profile_language')),
+                  trailing: const Icon(LucideIcons.chevronRight),
+                  onTap: () {
+                    // Exemple simple de sélecteur de langue
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (ctx) => SafeArea(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              title: const Text('Français'),
+                              onTap: () {
+                                LanguageService.instance.setLanguage('fr');
+                                Navigator.pop(ctx);
+                              },
+                            ),
+                            ListTile(
+                              title: const Text('English'),
+                              onTap: () {
+                                LanguageService.instance.setLanguage('en');
+                                Navigator.pop(ctx);
+                              },
+                            ),
+                            ListTile(
+                              title: const Text('العربية'),
+                              onTap: () {
+                                LanguageService.instance.setLanguage('ar');
+                                Navigator.pop(ctx);
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              const Divider(height: 1),
-              ListTile(
-                dense: true,
-                leading: const Icon(LucideIcons.info),
-                title: Text(context.tr('profile_about')),
-                trailing: const Icon(LucideIcons.chevronRight),
-                onTap: () {
-                  // TODO: afficher les infos de l'application
-                },
-              ),
-            ],
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  dense: true,
+                  leading: const Icon(LucideIcons.info),
+                  title: Text(context.tr('profile_about')),
+                  trailing: const Icon(LucideIcons.chevronRight),
+                  onTap: () {
+                    // TODO: afficher les infos de l'application
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: 14),
+          const SizedBox(height: 14),
 
-        // Déconnexion
-        AppButton(
-          label: context.tr('profile_logout'),
-          icon: LucideIcons.logOut,
-          variant: AppButtonVariant.danger,
-          onPressed: onLogout,
-        ),
-      ],
+          // Déconnexion
+          AppButton(
+            label: context.tr('profile_logout'),
+            icon: LucideIcons.logOut,
+            variant: AppButtonVariant.danger,
+            onPressed: onLogout,
+          ),
+        ],
       ),
     );
   }
 }
+
 // Page Historique : affiche des filtres (plantes / période) en haut,
 // puis la liste de l'historique en dessous.
 class _HistoryPage extends StatelessWidget {
@@ -491,11 +482,11 @@ class _HistoryPage extends StatelessWidget {
             ],
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 4, 16, 8),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
           child: Text(
             context.tr('history_month_august2026'),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               color: Colors.black87,
             ),
@@ -504,66 +495,66 @@ class _HistoryPage extends StatelessWidget {
         Expanded(
           child: AppScrollbar(
             builder: (context, controller) => ListView(
-            controller: controller,
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            children: [
-              _PlotHistoryCard(
-                title: 'Plot A – Olive Grove',
-                subtitle: 'August 20, 2026',
-                badgeLabel: context.tr('history_badge_irrigateNow'),
-                badgeColor: Colors.red,
-                icon: LucideIcons.droplet,
-                iconBackground: Colors.orange.shade100,
-                iconColor: Colors.orange.shade700,
-              ),
-              _PlotHistoryCard(
-                title: 'Plot B – Wheat Field',
-                subtitle: 'August 14, 2026',
-                badgeLabel: 'Good Conditions',
-                badgeColor: Colors.green,
-                icon: LucideIcons.check,
-                iconBackground: Colors.green.shade100,
-                iconColor: Colors.green.shade900,
-              ),
-              _PlotHistoryCard(
-                title: 'Plot C – Citrus',
-                subtitle: 'August 6, 2026',
-                badgeLabel: 'Sow Now',
-                badgeColor: Colors.green,
-                icon: LucideIcons.sprout,
-                iconBackground: Colors.green.shade100,
-                iconColor: Colors.green.shade900,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 4, left: 4),
-                child: Text(
-                  'July 2026',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
+              controller: controller,
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              children: [
+                _PlotHistoryCard(
+                  title: context.tr('history_plotA'),
+                  subtitle: 'August 20, 2026',
+                  badgeLabel: context.tr('history_badge_irrigateNow'),
+                  badgeColor: Colors.red,
+                  icon: LucideIcons.droplet,
+                  iconBackground: Colors.orange.shade100,
+                  iconColor: Colors.orange.shade700,
+                ),
+                _PlotHistoryCard(
+                  title: context.tr('history_plotB'),
+                  subtitle: 'August 14, 2026',
+                  badgeLabel: context.tr('history_badge_goodConditions'),
+                  badgeColor: Colors.green,
+                  icon: LucideIcons.check,
+                  iconBackground: Colors.green.shade100,
+                  iconColor: Colors.green.shade900,
+                ),
+                _PlotHistoryCard(
+                  title: context.tr('history_plotC'),
+                  subtitle: 'August 6, 2026',
+                  badgeLabel: context.tr('history_badge_sowNow'),
+                  badgeColor: Colors.green,
+                  icon: LucideIcons.sprout,
+                  iconBackground: Colors.green.shade100,
+                  iconColor: Colors.green.shade900,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 4, left: 4),
+                  child: Text(
+                    context.tr('history_month_july2026'),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black87,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              _PlotHistoryCard(
-                title: 'Plot A – Olive Grove',
-                subtitle: 'Jul 29, 2026',
-                badgeLabel: 'Irrigate Now',
-                badgeColor: Colors.red,
-                icon: LucideIcons.droplet,
-                iconBackground: Colors.red.shade100,
-                iconColor: Colors.red.shade700,
-              ),
-              _PlotHistoryCard(
-                title: 'Plot B – Wheat Field',
-                subtitle: 'Jul 18, 2026',
-                badgeLabel: 'Good Conditions',
-                badgeColor: Colors.green,
-                icon: LucideIcons.check,
-                iconBackground: Colors.green.shade100,
-                iconColor: Colors.green.shade900,
-              ),
-            ],
+                const SizedBox(height: 8),
+                _PlotHistoryCard(
+                  title: context.tr('history_plotA'),
+                  subtitle: 'Jul 29, 2026',
+                  badgeLabel: context.tr('history_badge_irrigateNow'),
+                  badgeColor: Colors.red,
+                  icon: LucideIcons.droplet,
+                  iconBackground: Colors.red.shade100,
+                  iconColor: Colors.red.shade700,
+                ),
+                _PlotHistoryCard(
+                  title: context.tr('history_plotB'),
+                  subtitle: 'Jul 18, 2026',
+                  badgeLabel: context.tr('history_badge_goodConditions'),
+                  badgeColor: Colors.green,
+                  icon: LucideIcons.check,
+                  iconBackground: Colors.green.shade100,
+                  iconColor: Colors.green.shade900,
+                ),
+              ],
             ),
           ),
         ),
@@ -572,8 +563,6 @@ class _HistoryPage extends StatelessWidget {
   }
 }
 
-// Petit carré filtre réutilisable, avec libellé + flèche.
-// Petit carré filtre réutilisable, avec libellé + flèche, et un sous-texte optionnel en dessous.
 // Petit carré filtre réutilisable, avec libellé + flèche.
 class _FilterBox extends StatelessWidget {
   final String label;
@@ -611,6 +600,7 @@ class _FilterBox extends StatelessWidget {
     );
   }
 }
+
 // Carte d'historique : titre (plot), sous-titre (date) et badge coloré.
 class _PlotHistoryCard extends StatelessWidget {
   final String title;
@@ -699,6 +689,7 @@ class _PlotHistoryCard extends StatelessWidget {
     );
   }
 }
+
 // En-tête de la page Home : date du jour, salutation, localisation et météo.
 class _HomeHeader extends StatefulWidget {
   const _HomeHeader();
@@ -734,25 +725,26 @@ class _HomeHeaderState extends State<_HomeHeader> {
     }
   }
 
-  String _greeting() {
+  String _greeting(BuildContext context) {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning';
-    if (hour < 18) return 'Good afternoon';
-    return 'Good evening';
+    if (hour < 12) return context.tr('home_greeting_morning');
+    if (hour < 18) return context.tr('home_greeting_afternoon');
+    return context.tr('home_greeting_evening');
   }
 
-  String _formattedDate() {
-    const days = [
-      'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-      'Friday', 'Saturday', 'Sunday'
+  String _formattedDate(BuildContext context) {
+    const dayKeys = [
+      'day_monday', 'day_tuesday', 'day_wednesday', 'day_thursday',
+      'day_friday', 'day_saturday', 'day_sunday'
     ];
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+    const monthKeys = [
+      'month_january', 'month_february', 'month_march', 'month_april',
+      'month_may', 'month_june', 'month_july', 'month_august',
+      'month_september', 'month_october', 'month_november', 'month_december'
     ];
     final now = DateTime.now();
-    final dayName = days[now.weekday - 1];
-    final monthName = months[now.month - 1];
+    final dayName = context.tr(dayKeys[now.weekday - 1]);
+    final monthName = context.tr(monthKeys[now.month - 1]);
     return '$dayName, $monthName ${now.day}, ${now.year}';
   }
 
@@ -764,22 +756,22 @@ class _HomeHeaderState extends State<_HomeHeader> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _formattedDate(),
+            _formattedDate(context),
             style: const TextStyle(fontSize: 13, color: Colors.black54),
           ),
           const SizedBox(height: 4),
           Text(
-            _greeting(),
+            _greeting(context),
             style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
           Row(
-            children: const [
-              Icon(LucideIcons.mapPin, size: 16, color: Colors.black54),
-              SizedBox(width: 4),
+            children: [
+              const Icon(LucideIcons.mapPin, size: 16, color: Colors.black54),
+              const SizedBox(width: 4),
               Text(
-                'Tunis, Tunisie',
-                style: TextStyle(fontSize: 13, color: Colors.black54),
+                context.tr('home_location'),
+                style: const TextStyle(fontSize: 13, color: Colors.black54),
               ),
             ],
           ),
@@ -805,7 +797,7 @@ class _HomeHeaderState extends State<_HomeHeader> {
               height: 100,
               child: Center(
                 child: Text(
-                  'Weather unavailable',
+                  context.tr('home_weatherUnavailable'),
                   style: const TextStyle(color: Colors.white70),
                 ),
               ),
@@ -813,9 +805,9 @@ class _HomeHeaderState extends State<_HomeHeader> {
                 : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Today's Weather",
-                  style: TextStyle(
+                Text(
+                  context.tr('home_todaysWeather'),
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -893,6 +885,7 @@ class _HomeHeaderState extends State<_HomeHeader> {
     );
   }
 }
+
 class _ForecastDay extends StatelessWidget {
   final String day;
   final String iconUrl;
@@ -924,8 +917,7 @@ class _ForecastDay extends StatelessWidget {
     );
   }
 }
-// Carré "Today's Advice" : conseil du jour avec icône pluie, titre,
-// recommandation, texte explicatif et lien vers l'analyse complète.
+
 // Carré "Today's Advice" : conseil du jour avec icône pluie, titre,
 // recommandation, texte explicatif et lien vers l'analyse complète.
 class _TodayAdviceBox extends StatelessWidget {
@@ -961,27 +953,27 @@ class _TodayAdviceBox extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Today's Advice",
-                  style: TextStyle(
+                Text(
+                  context.tr('home_advice_title'),
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: Colors.orange,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Time to Irrigate',
-                  style: TextStyle(
+                Text(
+                  context.tr('home_advice_headline'),
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Soil moisture is low, no rain expected for the next three days.',
-                  style: TextStyle(
+                Text(
+                  context.tr('home_advice_body'),
+                  style: const TextStyle(
                     fontSize: 13,
                     color: Colors.black,
                   ),
@@ -993,18 +985,18 @@ class _TodayAdviceBox extends StatelessWidget {
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Text(
-                        'See full analysis',
-                        style: TextStyle(
+                        context.tr('home_advice_seeFullAnalysis'),
+                        style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: Colors.orange,
                           decoration: TextDecoration.underline,
                         ),
                       ),
-                      SizedBox(width: 4),
-                      Icon(LucideIcons.arrowRight, size: 16, color: Colors.orange),
+                      const SizedBox(width: 4),
+                      const Icon(LucideIcons.arrowRight, size: 16, color: Colors.orange),
                     ],
                   ),
                 ),
@@ -1016,6 +1008,7 @@ class _TodayAdviceBox extends StatelessWidget {
     );
   }
 }
+
 class _NewObservationBox extends StatelessWidget {
   const _NewObservationBox();
 
@@ -1032,19 +1025,19 @@ class _NewObservationBox extends StatelessWidget {
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
-                'New Observation',
-                style: TextStyle(
+                context.tr('home_newObservation_title'),
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
-                "Log today's field data for fresh advice",
-                style: TextStyle(
+                context.tr('home_newObservation_subtitle'),
+                style: const TextStyle(
                   fontSize: 13,
                   color: Colors.white70,
                 ),
@@ -1073,6 +1066,7 @@ class _NewObservationBox extends StatelessWidget {
     );
   }
 }
+
 // Carré "Your Field" : titre, nom du plot, dernière vérification,
 // séparateur, statut d'humidité (orange) et pourcentage en haut à droite.
 class _YourFieldBox extends StatelessWidget {
@@ -1093,26 +1087,26 @@ class _YourFieldBox extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Your Field',
-                style: TextStyle(
+              Text(
+                context.tr('home_yourField_title'),
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
-                'Plot A – Olive Grove',
-                style: TextStyle(
+              Text(
+                context.tr('home_yourField_plot'),
+                style: const TextStyle(
                   fontSize: 14,
                   color: Colors.black87,
                 ),
               ),
               const SizedBox(height: 4),
-              const Text(
-                'Last checked 2 days ago',
-                style: TextStyle(
+              Text(
+                context.tr('home_yourField_lastChecked'),
+                style: const TextStyle(
                   fontSize: 13,
                   color: Colors.black54,
                 ),
@@ -1124,12 +1118,12 @@ class _YourFieldBox extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               Row(
-                children: const [
-                  Icon(LucideIcons.droplet, size: 18, color: Colors.orange),
-                  SizedBox(width: 6),
+                children: [
+                  const Icon(LucideIcons.droplet, size: 18, color: Colors.orange),
+                  const SizedBox(width: 6),
                   Text(
-                    'Moisture – Low',
-                    style: TextStyle(
+                    context.tr('home_yourField_moistureLow'),
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: Colors.orange,
@@ -1156,6 +1150,7 @@ class _YourFieldBox extends StatelessWidget {
     );
   }
 }
+
 // Page "Nouvelle Observation" : sélection du plot avec navigation gauche/droite.
 class _NewObservationPage extends StatefulWidget {
   const _NewObservationPage();
@@ -1165,19 +1160,13 @@ class _NewObservationPage extends StatefulWidget {
 }
 
 class _NewObservationPageState extends State<_NewObservationPage> {
-  final List<String> _plots = ['Plot A – Olive', 'Plot B – Wheat', 'Plot C – Citrus'];
   int _selectedIndex = 0;
-
-  final List<String> _crops = ['Olive', 'Wheat', 'Citrus', 'Tomato'];
   int _selectedCropIndex = 0;
-  // ── Soil type ──
-  final List<String> _soilTypes = ['Sandy', 'Loamy', 'Clay'];
   int _selectedSoilTypeIndex = 0;
 
-// ── Field size ──
+  // ── Field size ──
   double _fieldSize = 3.2;
 
-  // 👉 COLLE ICI ton bloc :
   // ── Photo ──
   File? _selectedPhoto;
   // ── Notes ──
@@ -1199,6 +1188,24 @@ class _NewObservationPageState extends State<_NewObservationPage> {
     }
   }
 
+  List<String> _plots(BuildContext context) => [
+    context.tr('newObs_plotA'),
+    context.tr('newObs_plotB'),
+    context.tr('newObs_plotC'),
+  ];
+
+  List<String> _crops(BuildContext context) => [
+    context.tr('newObs_crop_olive'),
+    context.tr('newObs_crop_wheat'),
+    context.tr('newObs_crop_citrus'),
+    context.tr('newObs_crop_tomato'),
+  ];
+
+  List<String> _soilTypes(BuildContext context) => [
+    context.tr('newObs_soil_sandy'),
+    context.tr('newObs_soil_loamy'),
+    context.tr('newObs_soil_clay'),
+  ];
 
   void _goLeft() {
     if (_selectedIndex > 0) {
@@ -1207,17 +1214,18 @@ class _NewObservationPageState extends State<_NewObservationPage> {
   }
 
   void _goRight() {
-    if (_selectedIndex < _plots.length - 1) {
+    if (_selectedIndex < _plots(context).length - 1) {
       setState(() => _selectedIndex++);
     }
   }
+
   // Soil moisture (0.0 = Dry, 1.0 = Wet)
   double _soilMoisture = 0.32;
 
-  String get _moistureLabel {
-    if (_soilMoisture < 0.35) return 'Low';
-    if (_soilMoisture < 0.65) return 'Medium';
-    return 'High';
+  String _moistureLabel(BuildContext context) {
+    if (_soilMoisture < 0.35) return context.tr('newObs_moisture_low');
+    if (_soilMoisture < 0.65) return context.tr('newObs_moisture_medium');
+    return context.tr('newObs_moisture_high');
   }
 
   Color get _moistureColor {
@@ -1225,7 +1233,8 @@ class _NewObservationPageState extends State<_NewObservationPage> {
     if (_soilMoisture < 0.65) return Colors.amber.shade700;
     return Colors.green.shade700;
   }
-  Widget _buildCropBox(int index) {
+
+  Widget _buildCropBox(BuildContext context, int index) {
     final isSelected = index == _selectedCropIndex;
     return Expanded(
       child: InkWell(
@@ -1241,7 +1250,7 @@ class _NewObservationPageState extends State<_NewObservationPage> {
             ),
           ),
           child: Text(
-            _crops[index],
+            _crops(context)[index],
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 13,
@@ -1253,7 +1262,8 @@ class _NewObservationPageState extends State<_NewObservationPage> {
       ),
     );
   }
-  Widget _buildSoilTypeBox(int index) {
+
+  Widget _buildSoilTypeBox(BuildContext context, int index) {
     final isSelected = index == _selectedSoilTypeIndex;
     return Expanded(
       child: InkWell(
@@ -1269,7 +1279,7 @@ class _NewObservationPageState extends State<_NewObservationPage> {
             ),
           ),
           child: Text(
-            _soilTypes[index],
+            _soilTypes(context)[index],
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
@@ -1281,8 +1291,10 @@ class _NewObservationPageState extends State<_NewObservationPage> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
+    final plots = _plots(context);
     return AdaptiveScrollView (
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -1290,12 +1302,12 @@ class _NewObservationPageState extends State<_NewObservationPage> {
         children: [
           // Titre avec logo de localisation
           Row(
-            children: const [
-              Icon(LucideIcons.mapPin, size: 20, color: Colors.black87),
-              SizedBox(width: 8),
+            children: [
+              const Icon(LucideIcons.mapPin, size: 20, color: Colors.black87),
+              const SizedBox(width: 8),
               Text(
-                'Which plot?',
-                style: TextStyle(
+                context.tr('newObs_whichPlot'),
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -1307,12 +1319,12 @@ class _NewObservationPageState extends State<_NewObservationPage> {
 
           // Les 3 petits carrés de sélection
           Row(
-            children: List.generate(_plots.length, (index) {
+            children: List.generate(plots.length, (index) {
               final isSelected = index == _selectedIndex;
               return Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(
-                    right: index != _plots.length - 1 ? 10 : 0,
+                    right: index != plots.length - 1 ? 10 : 0,
                   ),
                   child: InkWell(
                     onTap: () => setState(() => _selectedIndex = index),
@@ -1330,7 +1342,7 @@ class _NewObservationPageState extends State<_NewObservationPage> {
                         ),
                       ),
                       child: Text(
-                        _plots[index],
+                        plots[index],
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 13,
@@ -1358,7 +1370,7 @@ class _NewObservationPageState extends State<_NewObservationPage> {
               ),
               const SizedBox(width: 16),
               IconButton(
-                onPressed: _selectedIndex < _plots.length - 1 ? _goRight : null,
+                onPressed: _selectedIndex < plots.length - 1 ? _goRight : null,
                 icon: const Icon(LucideIcons.chevronRight),
                 color: Colors.black87,
                 disabledColor: Colors.black26,
@@ -1369,12 +1381,12 @@ class _NewObservationPageState extends State<_NewObservationPage> {
 
           // Titre avec logo de plante
           Row(
-            children: const [
-              Icon(LucideIcons.sprout, size: 20, color: Colors.black87),
-              SizedBox(width: 8),
+            children: [
+              const Icon(LucideIcons.sprout, size: 20, color: Colors.black87),
+              const SizedBox(width: 8),
               Text(
-                'Crop Type',
-                style: TextStyle(
+                context.tr('newObs_cropType'),
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -1387,9 +1399,9 @@ class _NewObservationPageState extends State<_NewObservationPage> {
           // Première ligne : Olive, Wheat
           Row(
             children: [
-              _buildCropBox(0),
+              _buildCropBox(context, 0),
               const SizedBox(width: 10),
-              _buildCropBox(1),
+              _buildCropBox(context, 1),
             ],
           ),
           const SizedBox(height: 10),
@@ -1397,9 +1409,9 @@ class _NewObservationPageState extends State<_NewObservationPage> {
           // Deuxième ligne : Citrus, Tomato
           Row(
             children: [
-              _buildCropBox(2),
+              _buildCropBox(context, 2),
               const SizedBox(width: 10),
-              _buildCropBox(3),
+              _buildCropBox(context, 3),
             ],
           ),
           const SizedBox(height: 28),
@@ -1420,9 +1432,9 @@ class _NewObservationPageState extends State<_NewObservationPage> {
                   children: [
                     const Icon(LucideIcons.droplet, size: 18, color: Colors.black87),
                     const SizedBox(width: 8),
-                    const Text(
-                      'Soil moisture',
-                      style: TextStyle(
+                    Text(
+                      context.tr('newObs_soilMoisture'),
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                         color: Colors.black87,
@@ -1430,7 +1442,7 @@ class _NewObservationPageState extends State<_NewObservationPage> {
                     ),
                     const Spacer(),
                     Text(
-                      '$_moistureLabel · ${(_soilMoisture * 100).round()}%',
+                      '${_moistureLabel(context)} · ${(_soilMoisture * 100).round()}%',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -1474,13 +1486,13 @@ class _NewObservationPageState extends State<_NewObservationPage> {
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Dry', style: TextStyle(fontSize: 12, color: Colors.black54)),
-                      Text('Wet', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                      Text(context.tr('newObs_dry'), style: const TextStyle(fontSize: 12, color: Colors.black54)),
+                      Text(context.tr('newObs_wet'), style: const TextStyle(fontSize: 12, color: Colors.black54)),
                     ],
                   ),
                 ),
@@ -1488,117 +1500,117 @@ class _NewObservationPageState extends State<_NewObservationPage> {
             ),
           ),
 
-        const SizedBox(height: 28),
+          const SizedBox(height: 28),
 
 // ── Soil type ────────────────────────────────────────────
-        Row(
-          children: const [
-            Icon(LucideIcons.layers, size: 20, color: Colors.black87),
-            SizedBox(width: 8),
-            Text(
-              'Soil type',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            _buildSoilTypeBox(0),
-            const SizedBox(width: 10),
-            _buildSoilTypeBox(1),
-            const SizedBox(width: 10),
-            _buildSoilTypeBox(2),
-          ],
-        ),
-        const SizedBox(height: 28),
-
-// ── Field size ───────────────────────────────────────────
-        Row(
-          children: [
-            const Icon(LucideIcons.frame, size: 20, color: Colors.black87),
-            const SizedBox(width: 8),
-            const Expanded(
-              child: Text(
-                'Field size (ha)',
-                style: TextStyle(
+          Row(
+            children: [
+              const Icon(LucideIcons.layers, size: 20, color: Colors.black87),
+              const SizedBox(width: 8),
+              Text(
+                context.tr('newObs_soilType'),
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
-            ),
-            InkWell(
-              onTap: () {
-                setState(() {
-                  _fieldSize = (_fieldSize - 0.1).clamp(0.0, 999.0);
-                });
-              },
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                width: 36,
-                height: 36,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.green.shade50,
-                  borderRadius: BorderRadius.circular(8),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              _buildSoilTypeBox(context, 0),
+              const SizedBox(width: 10),
+              _buildSoilTypeBox(context, 1),
+              const SizedBox(width: 10),
+              _buildSoilTypeBox(context, 2),
+            ],
+          ),
+          const SizedBox(height: 28),
+
+// ── Field size ───────────────────────────────────────────
+          Row(
+            children: [
+              const Icon(LucideIcons.frame, size: 20, color: Colors.black87),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  context.tr('newObs_fieldSize'),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
-                child: const Icon(Icons.remove, size: 18, color: Colors.black87),
               ),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              _fieldSize.toStringAsFixed(1),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(width: 12),
-            InkWell(
-              onTap: () {
-                setState(() {
-                  _fieldSize = (_fieldSize + 0.1).clamp(0.0, 999.0);
-                });
-              },
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                width: 36,
-                height: 36,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.green.shade900,
-                  borderRadius: BorderRadius.circular(8),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    _fieldSize = (_fieldSize - 0.1).clamp(0.0, 999.0);
+                  });
+                },
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.remove, size: 18, color: Colors.black87),
                 ),
-                child: const Icon(Icons.add, size: 18, color: Colors.white),
               ),
-            ),
-          ],
-        ),
+              const SizedBox(width: 12),
+              Text(
+                _fieldSize.toStringAsFixed(1),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(width: 12),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    _fieldSize = (_fieldSize + 0.1).clamp(0.0, 999.0);
+                  });
+                },
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade900,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.add, size: 18, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 28),
 
 // ── Add a photo ─────────────────────────────────────────
           Row(
-            children: const [
-              Icon(LucideIcons.camera, size: 20, color: Colors.black87),
-              SizedBox(width: 8),
+            children: [
+              const Icon(LucideIcons.camera, size: 20, color: Colors.black87),
+              const SizedBox(width: 8),
               Text(
-                'Add a photo',
-                style: TextStyle(
+                context.tr('newObs_addPhoto'),
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(width: 6),
+              const SizedBox(width: 6),
               Text(
-                '(optional)',
-                style: TextStyle(
+                context.tr('newObs_optional'),
+                style: const TextStyle(
                   fontSize: 14,
                   color: Colors.black45,
                 ),
@@ -1632,7 +1644,7 @@ class _NewObservationPageState extends State<_NewObservationPage> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Tap to take or upload a photo',
+                      context.tr('newObs_tapToAddPhoto'),
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.green.shade700,
@@ -1656,19 +1668,19 @@ class _NewObservationPageState extends State<_NewObservationPage> {
 
 // ── Notes ────────────────────────────────────────────────
           Row(
-            children: const [
+            children: [
               Text(
-                'Notes',
-                style: TextStyle(
+                context.tr('newObs_notes'),
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(width: 6),
+              const SizedBox(width: 6),
               Text(
-                '(optional)',
-                style: TextStyle(
+                context.tr('newObs_optional'),
+                style: const TextStyle(
                   fontSize: 14,
                   color: Colors.black45,
                 ),
@@ -1685,10 +1697,10 @@ class _NewObservationPageState extends State<_NewObservationPage> {
             child: TextField(
               controller: _notesController,
               maxLines: 3,
-              decoration: const InputDecoration(
-                hintText: 'Anything else to mention?',
-                hintStyle: TextStyle(color: Colors.black38),
-                contentPadding: EdgeInsets.symmetric(
+              decoration: InputDecoration(
+                hintText: context.tr('newObs_notesHint'),
+                hintStyle: const TextStyle(color: Colors.black38),
+                contentPadding: const EdgeInsets.symmetric(
                   horizontal: 14,
                   vertical: 12,
                 ),
@@ -1704,10 +1716,10 @@ class _NewObservationPageState extends State<_NewObservationPage> {
             child: ElevatedButton(
               onPressed: () {
                 // TODO: lancer l'analyse avec toutes les données collectées
-                // plot: _plots[_selectedIndex]
-                // crop: _crops[_selectedCropIndex]
+                // plot: _plots(context)[_selectedIndex]
+                // crop: _crops(context)[_selectedCropIndex]
                 // moisture: _soilMoisture
-                // soilType: _soilTypes[_selectedSoilTypeIndex]
+                // soilType: _soilTypes(context)[_selectedSoilTypeIndex]
                 // fieldSize: _fieldSize
                 // photo: _selectedPhoto
                 // notes: _notesController.text
@@ -1721,22 +1733,21 @@ class _NewObservationPageState extends State<_NewObservationPage> {
                 ),
                 elevation: 0,
               ),
-              child: const Text(
-                'Analyze & Get Advice',
-                style: TextStyle(
+              child: Text(
+                context.tr('newObs_analyzeButton'),
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
-    ],
+        ],
       ),
     );
   }
 }
-// Page Résultat : affiche le statut d'irrigation et les données du sol
-// Page Résultat : affiche le statut d'irrigation et les données du sol
+
 // Page Résultat : affiche le statut d'irrigation et les données du sol
 class _ResultPage extends StatelessWidget {
   const _ResultPage();
@@ -1750,12 +1761,12 @@ class _ResultPage extends StatelessWidget {
         children: [
           // ── Sous-titre "Plot A — Olive Grove · Today" ──
           Row(
-            children: const [
-              Icon(LucideIcons.mapPin, size: 16, color: Colors.black54),
-              SizedBox(width: 4),
+            children: [
+              const Icon(LucideIcons.mapPin, size: 16, color: Colors.black54),
+              const SizedBox(width: 4),
               Text(
-                'Plot A — Olive Grove · Today',
-                style: TextStyle(fontSize: 14, color: Colors.black54),
+                context.tr('result_header'),
+                style: const TextStyle(fontSize: 14, color: Colors.black54),
               ),
             ],
           ),
@@ -1781,9 +1792,9 @@ class _ResultPage extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text(
-                    'NEEDS ATTENTION',
-                    style: TextStyle(
+                  child: Text(
+                    context.tr('result_needsAttention'),
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -1806,9 +1817,9 @@ class _ResultPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'Irrigate Now',
-                  style: TextStyle(
+                Text(
+                  context.tr('result_irrigateNow'),
+                  style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -1816,7 +1827,7 @@ class _ResultPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Best time: within the next 24 hours',
+                  context.tr('result_bestTime'),
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.white.withValues(alpha: 0.9),
@@ -1838,26 +1849,29 @@ class _ResultPage extends StatelessWidget {
             child: Column(
               children: [
                 _buildStatRow(
+                  context: context,
                   dotColor: Colors.orange.shade700,
                   icon: LucideIcons.droplet,
-                  label: 'Soil Moisture',
-                  value: '32% · Low',
+                  labelKey: 'result_soilMoisture',
+                  valueKey: 'result_soilMoistureValue',
                   valueColor: Colors.orange.shade700,
                   showBorder: true,
                 ),
                 _buildStatRow(
+                  context: context,
                   dotColor: Colors.grey,
                   icon: LucideIcons.home,
-                  label: 'Soil Quality',
-                  value: 'Sandy, fast-draining',
+                  labelKey: 'result_soilQuality',
+                  valueKey: 'result_soilQualityValue',
                   valueColor: Colors.black87,
                   showBorder: true,
                 ),
                 _buildStatRow(
+                  context: context,
                   dotColor: Colors.orange.shade700,
                   icon: LucideIcons.sun,
-                  label: 'Weather Ahead',
-                  value: 'Dry, 31°C avg',
+                  labelKey: 'result_weatherAhead',
+                  valueKey: 'result_weatherAheadValue',
                   valueColor: Colors.orange.shade700,
                   showBorder: false,
                 ),
@@ -1867,19 +1881,18 @@ class _ResultPage extends StatelessWidget {
           const SizedBox(height: 20),
 
           // ── "Why this matters" ──
-          const Text(
-            'Why this matters',
-            style: TextStyle(
+          Text(
+            context.tr('result_whyMatters_title'),
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),
           const SizedBox(height: 10),
-          const Text(
-            'Your soil is drying faster than usual for sandy ground, and the coming days stay hot and dry. '
-                'Irrigating now will protect root development before stress sets in.',
-            style: TextStyle(
+          Text(
+            context.tr('result_whyMatters_body'),
+            style: const TextStyle(
               fontSize: 14,
               height: 1.5,
               color: Colors.black54,
@@ -1888,25 +1901,25 @@ class _ResultPage extends StatelessWidget {
           const SizedBox(height: 24),
 
           // ── "What to do" ──
-          const Text(
-            'What to do',
-            style: TextStyle(
+          Text(
+            context.tr('result_whatToDo_title'),
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),
           const SizedBox(height: 12),
-          _buildChecklistItem('Irrigate within the next 24 hours'),
+          _buildChecklistItem(context.tr('result_step1')),
           const SizedBox(height: 12),
-          _buildChecklistItem('Use light, frequent watering — sandy soil drains fast'),
+          _buildChecklistItem(context.tr('result_step2')),
           const SizedBox(height: 12),
-          _buildChecklistItem('Recheck soil moisture in 3 days'),
+          _buildChecklistItem(context.tr('result_step3')),
           const SizedBox(height: 28),
 
           // ── Bouton "Save to History" ──
           AppButton(
-            label: 'Save to History',
+            label: context.tr('result_saveToHistory'),
             icon: LucideIcons.save,
             variant: AppButtonVariant.primary,
             onPressed: () {
@@ -1917,7 +1930,7 @@ class _ResultPage extends StatelessWidget {
 
           // ── Bouton "New Observation" ──
           AppButton(
-            label: 'New Observation',
+            label: context.tr('result_newObservation'),
             icon: LucideIcons.plus,
             variant: AppButtonVariant.outline,
             onPressed: () {
@@ -1930,10 +1943,11 @@ class _ResultPage extends StatelessWidget {
   }
 
   Widget _buildStatRow({
+    required BuildContext context,
     required Color dotColor,
     required IconData icon,
-    required String label,
-    required String value,
+    required String labelKey,
+    required String valueKey,
     required Color valueColor,
     required bool showBorder,
   }) {
@@ -1957,11 +1971,11 @@ class _ResultPage extends StatelessWidget {
               const SizedBox(width: 10),
               Icon(icon, size: 18, color: Colors.black54),
               const SizedBox(width: 8),
-              Text(label, style: const TextStyle(fontSize: 15, color: Colors.black87)),
+              Text(context.tr(labelKey), style: const TextStyle(fontSize: 15, color: Colors.black87)),
             ],
           ),
           Text(
-            value,
+            context.tr(valueKey),
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: valueColor),
           ),
         ],
@@ -2001,7 +2015,3 @@ class _ResultPage extends StatelessWidget {
     );
   }
 }
-
-
-
-
